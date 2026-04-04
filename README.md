@@ -1,2 +1,3 @@
-# skycast
+# SkyCast
+
 Aplikacion Web për motin.
