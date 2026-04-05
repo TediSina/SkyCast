@@ -39,11 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SkyCast</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
+    <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
 <body>
-    <main class="auth-page">
+    <main class="auth-page auth-gradient">
         <section class="auth-card">
+            <div class="auth-badge">SkyCast</div>
             <h1>Hyr në sistem</h1>
+            <p class="auth-subtitle">Kontrollo motin dhe menaxho qytetet e ruajtura nga dashboard-i yt personal.</p>
 
             <?php if ($successMessage): ?>
                 <div class="alert success"><?= e($successMessage) ?></div>
@@ -59,12 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form method="POST" class="form">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
+            <form method="POST" class="form" id="loginForm" novalidate>
+                <div class="field-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
+                </div>
 
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div class="field-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
                 <button type="submit" class="primary-btn full-width">Login</button>
             </form>

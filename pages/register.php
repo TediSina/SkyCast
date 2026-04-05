@@ -52,11 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - SkyCast</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
+    <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
 <body>
-    <main class="auth-page">
+    <main class="auth-page auth-gradient">
         <section class="auth-card">
+            <div class="auth-badge">SkyCast</div>
             <h1>Regjistrohu</h1>
+            <p class="auth-subtitle">Krijo llogarinë tënde për të ruajtur qytetet e preferuara dhe për të parë motin në çdo kohë.</p>
 
             <?php if (!empty($errors)): ?>
                 <div class="alert error">
@@ -68,24 +71,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form method="POST" class="form">
-                <label for="name">Emri</label>
-                <input type="text" id="name" name="name" value="<?= e($name) ?>" required>
+            <form method="POST" class="form" id="registerForm" novalidate>
+                <div class="field-group">
+                    <label for="name">Emri</label>
+                    <input type="text" id="name" name="name" value="<?= e($name) ?>" required>
+                </div>
 
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
+                <div class="field-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
+                </div>
 
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <div class="field-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
 
-                <label for="confirm_password">Perserit password</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+                <div class="field-group">
+                    <label for="confirm_password">Përsërit password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
 
                 <button type="submit" class="primary-btn full-width">Register</button>
             </form>
 
             <p class="small-text">
-                Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr ketu</a>
+                Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr këtu</a>
             </p>
 
             <p class="small-text">

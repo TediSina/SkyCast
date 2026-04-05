@@ -17,30 +17,39 @@ document.addEventListener('DOMContentLoaded', () => {
             .replaceAll("'", '&#039;');
     }
 
-    function weatherCodeToText(code) {
+    function getWeatherMeta(code) {
         const map = {
-            0: 'Qiell i kthjellët',
-            1: 'Kryesisht i kthjellët',
-            2: 'Pjesërisht me re',
-            3: 'Me re',
-            45: 'Mjegull',
-            48: 'Mjegull me ngricë',
-            51: 'Shi i lehtë',
-            53: 'Shi mesatar',
-            55: 'Shi i dendur',
-            61: 'Shi i lehtë',
-            63: 'Shi mesatar',
-            65: 'Shi i fortë',
-            71: 'Borë e lehtë',
-            73: 'Borë mesatare',
-            75: 'Borë e dendur',
-            80: 'Rrebeshe të lehta',
-            81: 'Rrebeshe mesatare',
-            82: 'Rrebeshe të forta',
-            95: 'Stuhi'
+            0:  { text: 'Qiell i kthjellët', icon: '☀️' },
+            1:  { text: 'Kryesisht i kthjellët', icon: '🌤️' },
+            2:  { text: 'Pjesërisht me re', icon: '⛅' },
+            3:  { text: 'Me re', icon: '☁️' },
+            45: { text: 'Mjegull', icon: '🌫️' },
+            48: { text: 'Mjegull me ngricë', icon: '🌫️' },
+            51: { text: 'Shi i lehtë', icon: '🌦️' },
+            53: { text: 'Shi mesatar', icon: '🌦️' },
+            55: { text: 'Shi i dendur', icon: '🌧️' },
+            56: { text: 'Shi i ngrirë i lehtë', icon: '🌧️' },
+            57: { text: 'Shi i ngrirë i fortë', icon: '🌧️' },
+            61: { text: 'Shi i lehtë', icon: '🌦️' },
+            63: { text: 'Shi mesatar', icon: '🌧️' },
+            65: { text: 'Shi i fortë', icon: '🌧️' },
+            66: { text: 'Shi i ngrirë i lehtë', icon: '🌧️' },
+            67: { text: 'Shi i ngrirë i fortë', icon: '🌧️' },
+            71: { text: 'Borë e lehtë', icon: '🌨️' },
+            73: { text: 'Borë mesatare', icon: '🌨️' },
+            75: { text: 'Borë e dendur', icon: '❄️' },
+            77: { text: 'Kokrra bore', icon: '❄️' },
+            80: { text: 'Rrebeshe të lehta', icon: '🌦️' },
+            81: { text: 'Rrebeshe mesatare', icon: '🌧️' },
+            82: { text: 'Rrebeshe të forta', icon: '⛈️' },
+            85: { text: 'Rrebeshe bore të lehta', icon: '🌨️' },
+            86: { text: 'Rrebeshe bore të forta', icon: '❄️' },
+            95: { text: 'Stuhi', icon: '⛈️' },
+            96: { text: 'Stuhi me breshër të lehtë', icon: '⛈️' },
+            99: { text: 'Stuhi me breshër të fortë', icon: '⛈️' }
         };
 
-        return map[code] || `Kodi i motit: ${code}`;
+        return map[code] || { text: `Kodi i motit: ${code}`, icon: '🌍' };
     }
 
     function formatDate(dateString) {
@@ -67,12 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderWeather(cityName, countryName, data, latitude, longitude) {
         const current = data.current;
         const daily = data.daily;
+        const currentMeta = getWeatherMeta(current.weather_code);
 
         const forecastHtml = daily.time.slice(0, 5).map((date, index) => {
+            const meta = getWeatherMeta(daily.weather_code[index]);
             return `
                 <div class="forecast-day">
+                    <div class="forecast-icon">${meta.icon}</div>
                     <h4>${escapeHtml(formatDate(date))}</h4>
-                    <p>${escapeHtml(weatherCodeToText(daily.weather_code[index]))}</p>
+                    <p class="forecast-text">${escapeHtml(meta.text)}</p>
                     <p><strong>Max:</strong> ${daily.temperature_2m_max[index]}°C</p>
                     <p><strong>Min:</strong> ${daily.temperature_2m_min[index]}°C</p>
                 </div>
@@ -81,13 +93,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         weatherResult.innerHTML = `
             <div class="weather-card">
-                <h3>${escapeHtml(cityName)}${countryName ? ', ' + escapeHtml(countryName) : ''}</h3>
-                <div class="weather-main">
-                    <p><strong>Temperatura:</strong> ${current.temperature_2m}°C</p>
-                    <p><strong>Era:</strong> ${current.wind_speed_10m} km/h</p>
-                    <p><strong>Gjendja:</strong> ${escapeHtml(weatherCodeToText(current.weather_code))}</p>
+                <div class="weather-top">
+                    <div>
+                        <h3>${escapeHtml(cityName)}${countryName ? ', ' + escapeHtml(countryName) : ''}</h3>
+                        <p class="weather-description">${escapeHtml(currentMeta.text)}</p>
+                    </div>
+                    <div class="weather-icon">${currentMeta.icon}</div>
                 </div>
 
+                <div class="weather-main">
+                    <div class="weather-stat">
+                        <span class="stat-label">Temperatura</span>
+                        <span class="stat-value">${current.temperature_2m}°C</span>
+                    </div>
+
+                    <div class="weather-stat">
+                        <span class="stat-label">Era</span>
+                        <span class="stat-value">${current.wind_speed_10m} km/h</span>
+                    </div>
+                </div>
+
+                <h4 class="forecast-title">Parashikimi 5-ditor</h4>
                 <div class="forecast-grid">
                     ${forecastHtml}
                 </div>
@@ -102,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error('Nuk u arrit kerkesa per qytetin.');
+            throw new Error('Nuk u arrit kërkesa për qytetin.');
         }
 
         const data = await response.json();
@@ -119,10 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error('Nuk u arrit kerkesa per motin.');
+            throw new Error('Nuk u arrit kërkesa për motin.');
         }
 
         return response.json();
+    }
+
+    function isValidCityName(cityName) {
+        const cityRegex = /^[A-Za-zÀ-ž\u00C0-\u024F\s'’-]{2,}$/;
+        return cityRegex.test(cityName.trim());
     }
 
     async function loadWeatherByCityName(cityName) {
@@ -167,8 +198,9 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
 
             const cityName = cityInput.value.trim();
-            if (!cityName) {
-                showStatus('Shkruaj emrin e një qyteti.', true);
+
+            if (!isValidCityName(cityName)) {
+                showStatus('Shkruaj një emër qyteti të vlefshëm.', true);
                 return;
             }
 
