@@ -13,7 +13,7 @@ require_once __DIR__ . '/includes/functions.php';
 <body>
     <header class="site-header transparent-header">
         <div class="container nav">
-            <h1 class="logo">SkyCast</h1>
+            <h1 class="logo"><a href="<?= e(appUrl()) ?>">SkyCast</a></h1>
             <nav>
                 <a href="<?= e(appUrl()) ?>">Home</a>
                 <?php if (isLoggedIn()): ?>

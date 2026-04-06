@@ -62,9 +62,10 @@ $errorMessage = getFlash('error');
 <body>
     <header class="site-header">
         <div class="container nav">
-            <h1 class="logo">SkyCast</h1>
+            <h1 class="logo"><a href="<?= e(appUrl()) ?>">SkyCast</a></h1>
             <nav>
                 <a href="<?= e(appUrl()) ?>">Home</a>
+                <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Dashboard</a>
                 <a href="<?= e(appUrl('logout.php')) ?>">Logout</a>
             </nav>
         </div>
