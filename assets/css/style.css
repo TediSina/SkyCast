@@ -460,9 +460,15 @@ button:hover,
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
     gap: 24px;
     padding: 30px 0 50px;
+}
+
+.dashboard-grid > .card,
+#weatherResult,
+.weather-card {
+    min-width: 0;
 }
 
 .status-text {
@@ -534,6 +540,66 @@ button:hover,
 
 .forecast-title {
     margin: 0 0 16px;
+}
+
+.hourly-forecast {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    margin-bottom: 24px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.hourly-card {
+    flex: 0 0 150px;
+    min-height: 168px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+}
+
+.hourly-time {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hourly-icon {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.hourly-card strong {
+    font-size: 24px;
+    line-height: 1.1;
+}
+
+.hourly-card span:last-of-type {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+.hourly-card small {
+    color: #475569;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.empty-forecast {
+    min-width: 260px;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
 }
 
 .forecast-grid {

@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getWeatherMeta(code) {
+        if (code === undefined || code === null) {
+            return { text: 'Pa të dhëna', icon: '🌍' };
+        }
+
         const map = {
             0:  { text: 'Qiell i kthjellët', icon: '☀️' },
             1:  { text: 'Kryesisht i kthjellët', icon: '🌤️' },
@@ -52,12 +56,55 @@ document.addEventListener('DOMContentLoaded', () => {
         return map[code] || { text: `Kodi i motit: ${code}`, icon: '🌍' };
     }
 
+    function formatMeasurement(value, suffix = '') {
+        return value === undefined || value === null ? '-' : `${value}${suffix}`;
+    }
+
     function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('sq-AL', {
             weekday: 'short',
             day: '2-digit',
             month: '2-digit'
+        });
+    }
+
+    function formatHour(dateTimeString, currentTimeString = '') {
+        if (currentTimeString && dateTimeString.slice(0, 13) === currentTimeString.slice(0, 13)) {
+            return 'Tani';
+        }
+
+        const timePart = dateTimeString.split('T')[1];
+        return timePart ? timePart.slice(0, 5) : dateTimeString;
+    }
+
+    function getUpcomingHours(hourly, currentTimeString) {
+        if (!hourly || !Array.isArray(hourly.time) || hourly.time.length === 0) {
+            return [];
+        }
+
+        const currentHour = currentTimeString ? currentTimeString.slice(0, 13) : '';
+        const firstUpcomingIndex = currentHour
+            ? hourly.time.findIndex((time) => time.slice(0, 13) >= currentHour)
+            : 0;
+        const startIndex = firstUpcomingIndex >= 0 ? firstUpcomingIndex : 0;
+        const temperatures = Array.isArray(hourly.temperature_2m) ? hourly.temperature_2m : [];
+        const weatherCodes = Array.isArray(hourly.weather_code) ? hourly.weather_code : [];
+        const windSpeeds = Array.isArray(hourly.wind_speed_10m) ? hourly.wind_speed_10m : [];
+        const precipitationProbabilities = Array.isArray(hourly.precipitation_probability)
+            ? hourly.precipitation_probability
+            : [];
+
+        return hourly.time.slice(startIndex, startIndex + 12).map((time, offset) => {
+            const index = startIndex + offset;
+
+            return {
+                time,
+                temperature: temperatures[index],
+                weatherCode: weatherCodes[index],
+                windSpeed: windSpeeds[index],
+                precipitationProbability: precipitationProbabilities[index]
+            };
         });
     }
 
@@ -75,8 +122,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderWeather(cityName, countryName, data, latitude, longitude) {
         const current = data.current;
+        const hourly = data.hourly;
         const daily = data.daily;
         const currentMeta = getWeatherMeta(current.weather_code);
+        const hourlyItems = getUpcomingHours(hourly, current.time);
+
+        const hourlyHtml = hourlyItems.length > 0 ? hourlyItems.map((hour) => {
+            const meta = getWeatherMeta(hour.weatherCode);
+
+            return `
+                <div class="hourly-card">
+                    <span class="hourly-time">${escapeHtml(formatHour(hour.time, current.time))}</span>
+                    <span class="hourly-icon">${meta.icon}</span>
+                    <strong>${formatMeasurement(hour.temperature, '°C')}</strong>
+                    <span>${escapeHtml(meta.text)}</span>
+                    <small>${formatMeasurement(hour.windSpeed, ' km/h')} · ${formatMeasurement(hour.precipitationProbability, '% shi')}</small>
+                </div>
+            `;
+        }).join('') : '<p class="empty-forecast">Nuk ka të dhëna orare për këtë vendndodhje.</p>';
 
         const forecastHtml = daily.time.slice(0, 5).map((date, index) => {
             const meta = getWeatherMeta(daily.weather_code[index]);
@@ -113,6 +176,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
+                <h4 class="forecast-title">Parashikimi orë pas ore</h4>
+                <div class="hourly-forecast" aria-label="Parashikimi orë pas ore">
+                    ${hourlyHtml}
+                </div>
+
                 <h4 class="forecast-title">Parashikimi 5-ditor</h4>
                 <div class="forecast-grid">
                     ${forecastHtml}
@@ -141,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchWeather(latitude, longitude) {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5&timezone=auto`;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code,wind_speed_10m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5&timezone=auto`;
         const response = await fetch(url);
 
         if (!response.ok) {

@@ -57,8 +57,8 @@ require_once __DIR__ . '/includes/functions.php';
                             <span>Të dhëna të motit në kohë reale</span>
                         </div>
                         <div class="stat-card">
-                            <strong>Saved Cities</strong>
-                            <span>Qasje e shpejtë te qytetet e ruajtura</span>
+                            <strong>Qytetet e Ruajtura</strong>
+                            <span>Qasje e shpejtë me anë të ruajtjes së qyteteve</span>
                         </div>
                     </div>
                 </div>
