@@ -54,55 +54,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
     <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
-<body>
+<body class="auth-body">
     <main class="auth-page auth-gradient">
-        <section class="auth-card">
-            <div class="auth-badge">SkyCast</div>
-            <h1>Regjistrohu</h1>
-            <p class="auth-subtitle">Krijo llogarinë tënde për të ruajtur qytetet e preferuara dhe për të parë motin në çdo kohë.</p>
-
-            <?php if (!empty($errors)): ?>
-                <div class="alert error">
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li><?= e($error) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+        <div class="auth-layout">
+            <aside class="auth-visual" aria-label="Pamje e motit">
+                <a class="auth-logo" href="<?= e(appUrl()) ?>">SkyCast</a>
+                <div class="auth-forecast-card">
+                    <span>Tomorrow</span>
+                    <strong>24°C</strong>
+                    <p>Ruaj qytetet e preferuara dhe kontrollo motin pa humbur kohe.</p>
                 </div>
-            <?php endif; ?>
+            </aside>
 
-            <form method="POST" class="form" id="registerForm" novalidate>
-                <div class="field-group">
-                    <label for="name">Emri</label>
-                    <input type="text" id="name" name="name" value="<?= e($name) ?>" required>
-                </div>
+            <section class="auth-card">
+                <div class="auth-badge">Register</div>
+                <h1>Krijo llogari</h1>
+                <p class="auth-subtitle">Nderto listen tende te qyteteve dhe hap parashikimin sa here te duhet.</p>
 
-                <div class="field-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
-                </div>
+                <?php if (!empty($errors)): ?>
+                    <div class="alert error">
+                        <ul>
+                            <?php foreach ($errors as $error): ?>
+                                <li><?= e($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
-                <div class="field-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
+                <form method="POST" class="form" id="registerForm" novalidate>
+                    <div class="field-group">
+                        <label for="name">Emri</label>
+                        <input type="text" id="name" name="name" value="<?= e($name) ?>" required>
+                    </div>
 
-                <div class="field-group">
-                    <label for="confirm_password">Përsërit password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
+                    <div class="field-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
+                    </div>
 
-                <button type="submit" class="primary-btn full-width">Register</button>
-            </form>
+                    <div class="field-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
 
-            <p class="small-text">
-                Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr këtu</a>
-            </p>
+                    <div class="field-group">
+                        <label for="confirm_password">Perserit password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
 
-            <p class="small-text">
-                <a href="<?= e(appUrl()) ?>">Kthehu te Home</a>
-            </p>
-        </section>
+                    <button type="submit" class="primary-btn full-width">Register</button>
+                </form>
+
+                <p class="small-text">
+                    Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr ketu</a>
+                </p>
+
+                <p class="small-text">
+                    <a href="<?= e(appUrl()) ?>">Kthehu te Home</a>
+                </p>
+            </section>
+        </div>
     </main>
 </body>
 </html>

@@ -56,6 +56,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return map[code] || { text: `Kodi i motit: ${code}`, icon: '🌍' };
     }
 
+    function getWeatherTheme(code) {
+        if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(code)) {
+            return 'theme-rain';
+        }
+
+        if ([71, 73, 75, 77, 85, 86].includes(code)) {
+            return 'theme-snow';
+        }
+
+        if ([95, 96, 99].includes(code)) {
+            return 'theme-storm';
+        }
+
+        if ([45, 48].includes(code)) {
+            return 'theme-fog';
+        }
+
+        if ([2, 3].includes(code)) {
+            return 'theme-cloud';
+        }
+
+        return 'theme-clear';
+    }
+
     function formatMeasurement(value, suffix = '') {
         return value === undefined || value === null ? '-' : `${value}${suffix}`;
     }
@@ -125,6 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const hourly = data.hourly;
         const daily = data.daily;
         const currentMeta = getWeatherMeta(current.weather_code);
+        const currentTheme = getWeatherTheme(current.weather_code);
+        const currentTime = current.time ? formatHour(current.time) : '-';
         const hourlyItems = getUpcomingHours(hourly, current.time);
 
         const hourlyHtml = hourlyItems.length > 0 ? hourlyItems.map((hour) => {
@@ -155,36 +181,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         weatherResult.innerHTML = `
-            <div class="weather-card">
-                <div class="weather-top">
-                    <div>
-                        <h3>${escapeHtml(cityName)}${countryName ? ', ' + escapeHtml(countryName) : ''}</h3>
-                        <p class="weather-description">${escapeHtml(currentMeta.text)}</p>
-                    </div>
-                    <div class="weather-icon">${currentMeta.icon}</div>
-                </div>
-
-                <div class="weather-main">
-                    <div class="weather-stat">
-                        <span class="stat-label">Temperatura</span>
-                        <span class="stat-value">${current.temperature_2m}°C</span>
+            <div class="weather-card ${currentTheme}">
+                <section class="weather-current">
+                    <div class="weather-top">
+                        <div>
+                            <span class="section-kicker">Mot aktual</span>
+                            <h3>${escapeHtml(cityName)}${countryName ? ', ' + escapeHtml(countryName) : ''}</h3>
+                            <p class="weather-description">${escapeHtml(currentMeta.text)}</p>
+                            <div class="weather-temp">${formatMeasurement(current.temperature_2m, '°C')}</div>
+                        </div>
+                        <div class="weather-icon">${currentMeta.icon}</div>
                     </div>
 
-                    <div class="weather-stat">
-                        <span class="stat-label">Era</span>
-                        <span class="stat-value">${current.wind_speed_10m} km/h</span>
+                    <div class="weather-main">
+                        <div class="weather-stat">
+                            <span class="stat-label">Temperatura</span>
+                            <span class="stat-value">${formatMeasurement(current.temperature_2m, '°C')}</span>
+                        </div>
+
+                        <div class="weather-stat">
+                            <span class="stat-label">Era</span>
+                            <span class="stat-value">${formatMeasurement(current.wind_speed_10m, ' km/h')}</span>
+                        </div>
+
+                        <div class="weather-stat">
+                            <span class="stat-label">Ora</span>
+                            <span class="stat-value">${escapeHtml(currentTime)}</span>
+                        </div>
                     </div>
-                </div>
+                </section>
 
-                <h4 class="forecast-title">Parashikimi orë pas ore</h4>
-                <div class="hourly-forecast" aria-label="Parashikimi orë pas ore">
-                    ${hourlyHtml}
-                </div>
+                <section class="forecast-section">
+                    <h4 class="forecast-title">Parashikimi ore pas ore</h4>
+                    <div class="hourly-forecast" aria-label="Parashikimi ore pas ore">
+                        ${hourlyHtml}
+                    </div>
+                </section>
 
-                <h4 class="forecast-title">Parashikimi 5-ditor</h4>
-                <div class="forecast-grid">
-                    ${forecastHtml}
-                </div>
+                <section class="forecast-section">
+                    <h4 class="forecast-title">Parashikimi 5-ditor</h4>
+                    <div class="forecast-grid">
+                        ${forecastHtml}
+                    </div>
+                </section>
             </div>
         `;
 

@@ -41,49 +41,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
     <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
-<body>
+<body class="auth-body">
     <main class="auth-page auth-gradient">
-        <section class="auth-card">
-            <div class="auth-badge">SkyCast</div>
-            <h1>Hyr në sistem</h1>
-            <p class="auth-subtitle">Kontrollo motin dhe menaxho qytetet e ruajtura nga dashboard-i yt personal.</p>
-
-            <?php if ($successMessage): ?>
-                <div class="alert success"><?= e($successMessage) ?></div>
-            <?php endif; ?>
-
-            <?php if (!empty($errors)): ?>
-                <div class="alert error">
-                    <ul>
-                        <?php foreach ($errors as $error): ?>
-                            <li><?= e($error) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
+        <div class="auth-layout">
+            <aside class="auth-visual" aria-label="Pamje e motit">
+                <a class="auth-logo" href="<?= e(appUrl()) ?>">SkyCast</a>
+                <div class="auth-forecast-card">
+                    <span>Tonight</span>
+                    <strong>18°C</strong>
+                    <p>Qasje e shpejte te moti aktual, parashikimi orar dhe qytetet e tua te ruajtura.</p>
                 </div>
-            <?php endif; ?>
+            </aside>
 
-            <form method="POST" class="form" id="loginForm" novalidate>
-                <div class="field-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
-                </div>
+            <section class="auth-card">
+                <div class="auth-badge">Login</div>
+                <h1>Hyr ne sistem</h1>
+                <p class="auth-subtitle">Vazhdo te dashboard-i yt personal per motin dhe qytetet e ruajtura.</p>
 
-                <div class="field-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
+                <?php if ($successMessage): ?>
+                    <div class="alert success"><?= e($successMessage) ?></div>
+                <?php endif; ?>
 
-                <button type="submit" class="primary-btn full-width">Login</button>
-            </form>
+                <?php if (!empty($errors)): ?>
+                    <div class="alert error">
+                        <ul>
+                            <?php foreach ($errors as $error): ?>
+                                <li><?= e($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
 
-            <p class="small-text">
-                Nuk ke llogari? <a href="<?= e(appUrl('pages/register.php')) ?>">Regjistrohu</a>
-            </p>
+                <form method="POST" class="form" id="loginForm" novalidate>
+                    <div class="field-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
+                    </div>
 
-            <p class="small-text">
-                <a href="<?= e(appUrl()) ?>">Kthehu te Home</a>
-            </p>
-        </section>
+                    <div class="field-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+
+                    <button type="submit" class="primary-btn full-width">Login</button>
+                </form>
+
+                <p class="small-text">
+                    Nuk ke llogari? <a href="<?= e(appUrl('pages/register.php')) ?>">Regjistrohu</a>
+                </p>
+
+                <p class="small-text">
+                    <a href="<?= e(appUrl()) ?>">Kthehu te Home</a>
+                </p>
+            </section>
+        </div>
     </main>
 </body>
 </html>

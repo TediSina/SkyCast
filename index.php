@@ -7,10 +7,10 @@ require_once __DIR__ . '/includes/functions.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyCast - Home</title>
+    <title>SkyCast - Weather App</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
 </head>
-<body>
+<body class="home-page">
     <header class="site-header transparent-header">
         <div class="container nav">
             <h1 class="logo"><a href="<?= e(appUrl()) ?>">SkyCast</a></h1>
@@ -32,10 +32,10 @@ require_once __DIR__ . '/includes/functions.php';
             <div class="container landing-grid">
                 <div class="hero-copy">
                     <span class="hero-badge">Weather Web App</span>
-                    <h2>Kontrollo motin. Ruaj qytetet. Qëndro gjithmonë i përgatitur.</h2>
+                    <h2>SkyCast</h2>
                     <p>
-                        SkyCast është një aplikacion web modern ku mund të kërkosh motin për qytete të ndryshme,
-                        të shohësh temperaturën, erën dhe parashikimin disa-ditor, si edhe të ruash qytetet e tua të preferuara.
+                        Mot aktual, parashikim ore pas ore dhe qytete te ruajtura ne nje eksperience te shpejte,
+                        te qarte dhe te ndertuar per perdorim te perditshem.
                     </p>
 
                     <div class="button-row">
@@ -43,40 +43,50 @@ require_once __DIR__ . '/includes/functions.php';
                             <a class="primary-btn" href="<?= e(appUrl('pages/dashboard.php')) ?>">Hap Dashboard</a>
                         <?php else: ?>
                             <a class="primary-btn" href="<?= e(appUrl('pages/register.php')) ?>">Fillo tani</a>
-                            <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr në sistem</a>
+                            <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr ne sistem</a>
                         <?php endif; ?>
                     </div>
 
                     <div class="hero-stats">
                         <div class="stat-card">
-                            <strong>Register/Login</strong>
-                            <span>Sistem i sigurt përdoruesi</span>
+                            <strong>12 ore</strong>
+                            <span>Parashikim i shpejte per pjesen tjeter te dites.</span>
                         </div>
                         <div class="stat-card">
-                            <strong>Open-Meteo</strong>
-                            <span>Të dhëna të motit në kohë reale</span>
+                            <strong>5 dite</strong>
+                            <span>Temperatura maksimale, minimale dhe gjendja e motit.</span>
                         </div>
                         <div class="stat-card">
-                            <strong>Qytetet e Ruajtura</strong>
-                            <span>Qasje e shpejtë me anë të ruajtjes së qyteteve</span>
+                            <strong>Qytete</strong>
+                            <span>Ruaji vendet qe ndjek me shpesh ne dashboard.</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="hero-panel">
+                <div class="hero-panel" aria-label="Pamje e motit ne SkyCast">
+                    <div class="sky-visual">
+                        <div class="sun-disc"></div>
+                        <div class="cloud"></div>
+                        <div class="rain-lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+
                     <div class="preview-card">
                         <div class="preview-top">
-                            <span class="preview-city">Tiranë</span>
+                            <span class="preview-city">Tirane</span>
                             <span class="preview-icon">⛅</span>
                         </div>
                         <div class="preview-temp">22°C</div>
-                        <p class="preview-text">Pjesërisht me re · Erë 12 km/h</p>
+                        <p class="preview-text">Pjeserisht me re · Ere 12 km/h</p>
 
                         <div class="mini-forecast">
-                            <div><span>Mon</span><strong>23°</strong></div>
-                            <div><span>Tue</span><strong>21°</strong></div>
-                            <div><span>Wed</span><strong>20°</strong></div>
-                            <div><span>Thu</span><strong>24°</strong></div>
+                            <div><span>09:00</span><strong>20°</strong></div>
+                            <div><span>12:00</span><strong>23°</strong></div>
+                            <div><span>15:00</span><strong>24°</strong></div>
+                            <div><span>18:00</span><strong>21°</strong></div>
                         </div>
                     </div>
                 </div>
@@ -86,27 +96,28 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="features-section">
             <div class="container">
                 <div class="section-heading">
-                    <h3>Çfarë ofron SkyCast?</h3>
-                    <p>Një zgjidhje e thjeshtë, funksionale dhe e organizuar për të parë motin online.</p>
+                    <span class="section-kicker">Forecast tools</span>
+                    <h3>Nje pamje e paster per motin qe te duhet.</h3>
+                    <p>SkyCast bashkon kerkimin, parashikimin orar dhe qytetet e ruajtura ne nje panel te lehte per t'u perdorur.</p>
                 </div>
 
                 <div class="features-grid">
                     <article class="feature-card">
-                        <div class="feature-icon">🔐</div>
-                        <h4>Autentikim i sigurt</h4>
-                        <p>Regjistrim, login, logout dhe mbrojtje e dashboard-it vetëm për përdorues të loguar.</p>
+                        <div class="feature-icon">⏱️</div>
+                        <h4>Ore pas ore</h4>
+                        <p>Shiko ndryshimin e temperatures, eres dhe mundesine e shiut gjate dites.</p>
                     </article>
 
                     <article class="feature-card">
-                        <div class="feature-icon">🌍</div>
-                        <h4>Kërkim qytetesh</h4>
-                        <p>Kërko qytete të ndryshme dhe shfaq të dhënat kryesore të motit në një ndërfaqe të pastër.</p>
+                        <div class="feature-icon">🌦️</div>
+                        <h4>Parashikim ditor</h4>
+                        <p>Krahaso shpejt ditet e ardhshme me karta te lexueshme dhe te qarta.</p>
                     </article>
 
                     <article class="feature-card">
-                        <div class="feature-icon">⭐</div>
-                        <h4>Ruajtje qytetesh</h4>
-                        <p>Ruaj qytetet që dëshiron dhe rihapi shpejt nga dashboard-i yt personal.</p>
+                        <div class="feature-icon">📍</div>
+                        <h4>Qytete te ruajtura</h4>
+                        <p>Kthehu menjehere te qytetet qe ndjek me shpesh pa i kerkuar nga fillimi.</p>
                     </article>
                 </div>
             </div>
@@ -115,8 +126,8 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="cta-section">
             <div class="container cta-box">
                 <div>
-                    <h3>Gati për ta përdorur SkyCast?</h3>
-                    <p>Krijo llogari dhe fillo të kontrollosh motin për qytetet që të interesojnë.</p>
+                    <h3>Gati per parashikimin tend?</h3>
+                    <p>Krijo llogari dhe mbaje motin e qyteteve te preferuara gjithmone afer.</p>
                 </div>
 
                 <div class="button-row">
