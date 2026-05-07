@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedLongitude = document.getElementById('savedLongitude');
     const weatherSearchCard = document.querySelector('.weather-search-card');
     const searchButton = citySearchForm?.querySelector('button[type="submit"]');
+    const citySuggestions = document.getElementById('citySuggestions');
+    let suggestionAbortController = null;
+    let suggestionDebounceId = null;
+    let cityMatches = [];
+    let highlightedSuggestionIndex = -1;
+    let selectedCityMatch = null;
 
     function escapeHtml(value) {
         return String(value)
@@ -86,6 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return value === undefined || value === null ? '-' : `${value}${suffix}`;
     }
 
+    function getCityLabel(city) {
+        return [city.name, city.admin1, city.country].filter(Boolean).join(', ');
+    }
+
+    function getCityMeta(city) {
+        return [
+            city.country_code,
+            city.timezone,
+            city.latitude !== undefined && city.longitude !== undefined
+                ? `${Number(city.latitude).toFixed(2)}, ${Number(city.longitude).toFixed(2)}`
+                : ''
+        ].filter(Boolean).join(' · ');
+    }
+
     function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('sq-AL', {
@@ -149,6 +169,83 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    function setSuggestionExpanded(isExpanded) {
+        cityInput?.setAttribute('aria-expanded', String(isExpanded));
+    }
+
+    function hideCitySuggestions() {
+        if (!citySuggestions) {
+            return;
+        }
+
+        if (suggestionAbortController) {
+            suggestionAbortController.abort();
+            suggestionAbortController = null;
+        }
+
+        citySuggestions.classList.add('hidden');
+        citySuggestions.innerHTML = '';
+        highlightedSuggestionIndex = -1;
+        cityInput?.removeAttribute('aria-activedescendant');
+        setSuggestionExpanded(false);
+    }
+
+    function updateHighlightedSuggestion(nextIndex) {
+        if (!citySuggestions || cityMatches.length === 0) {
+            highlightedSuggestionIndex = -1;
+            cityInput?.removeAttribute('aria-activedescendant');
+            return;
+        }
+
+        highlightedSuggestionIndex = (nextIndex + cityMatches.length) % cityMatches.length;
+
+        citySuggestions.querySelectorAll('.city-suggestion').forEach((button, index) => {
+            const isHighlighted = index === highlightedSuggestionIndex;
+            button.classList.toggle('is-highlighted', isHighlighted);
+            button.setAttribute('aria-selected', String(isHighlighted));
+
+            if (isHighlighted) {
+                cityInput?.setAttribute('aria-activedescendant', button.id);
+                button.scrollIntoView({ block: 'nearest' });
+            }
+        });
+    }
+
+    function renderCitySuggestions(matches, message = '') {
+        if (!citySuggestions) {
+            return;
+        }
+
+        cityMatches = matches;
+        highlightedSuggestionIndex = -1;
+
+        if (matches.length === 0) {
+            citySuggestions.innerHTML = message
+                ? `<p class="city-suggestions-empty">${escapeHtml(message)}</p>`
+                : '';
+            citySuggestions.classList.toggle('hidden', !message);
+            setSuggestionExpanded(Boolean(message));
+            return;
+        }
+
+        citySuggestions.innerHTML = matches.map((city, index) => `
+            <button
+                type="button"
+                id="citySuggestion${index}"
+                class="city-suggestion"
+                role="option"
+                aria-selected="false"
+                data-index="${index}"
+            >
+                <strong>${escapeHtml(getCityLabel(city))}</strong>
+                <span>${escapeHtml(getCityMeta(city))}</span>
+            </button>
+        `).join('');
+
+        citySuggestions.classList.remove('hidden');
+        setSuggestionExpanded(true);
+    }
+
     function setActiveSavedCity(button = null) {
         document.querySelectorAll('.saved-city-button.is-active').forEach((savedButton) => {
             savedButton.classList.remove('is-active');
@@ -170,6 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.saved-city-button').forEach((button) => {
             button.disabled = isLoading;
         });
+
+        if (isLoading) {
+            hideCitySuggestions();
+        }
     }
 
     function showStatus(message, isError = false, isLoading = false) {
@@ -279,9 +380,9 @@ document.addEventListener('DOMContentLoaded', () => {
         prepareSaveCity(cityName, latitude, longitude);
     }
 
-    async function fetchCoordinates(cityName) {
-        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`;
-        const response = await fetch(url);
+    async function fetchCityMatches(cityName, count = 6, signal = undefined) {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=${count}&language=en&format=json`;
+        const response = await fetch(url, { signal });
 
         if (!response.ok) {
             throw new Error('Nuk u arrit kërkesa për qytetin.');
@@ -289,11 +390,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const data = await response.json();
 
-        if (!data.results || data.results.length === 0) {
+        return data.results || [];
+    }
+
+    async function fetchCoordinates(cityName) {
+        const matches = await fetchCityMatches(cityName, 1);
+
+        if (matches.length === 0) {
             throw new Error('Qyteti nuk u gjet.');
         }
 
-        return data.results[0];
+        return matches[0];
     }
 
     async function fetchWeather(latitude, longitude) {
@@ -310,6 +417,42 @@ document.addEventListener('DOMContentLoaded', () => {
     function isValidCityName(cityName) {
         const cityRegex = /^[A-Za-zÀ-ž\u00C0-\u024F\s'’-]{2,}$/;
         return cityRegex.test(cityName.trim());
+    }
+
+    function canRequestCitySuggestions(cityName) {
+        const cityRegex = /^[A-Za-zÀ-ž\u00C0-\u024F\s'’-]{2,}$/;
+        return cityRegex.test(cityName.trim());
+    }
+
+    function scheduleCitySuggestions() {
+        const query = cityInput.value.trim();
+        selectedCityMatch = null;
+
+        window.clearTimeout(suggestionDebounceId);
+
+        if (suggestionAbortController) {
+            suggestionAbortController.abort();
+        }
+
+        if (!canRequestCitySuggestions(query)) {
+            cityMatches = [];
+            hideCitySuggestions();
+            return;
+        }
+
+        suggestionDebounceId = window.setTimeout(async () => {
+            suggestionAbortController = new AbortController();
+
+            try {
+                renderCitySuggestions([], 'Duke kerkuar qytete...');
+                const matches = await fetchCityMatches(query, 6, suggestionAbortController.signal);
+                renderCitySuggestions(matches, 'Nuk u gjet asnje qytet.');
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    renderCitySuggestions([], 'Sugjerimet nuk u ngarkuan.');
+                }
+            }
+        }, 260);
     }
 
     async function loadWeatherByCityName(cityName) {
@@ -340,8 +483,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function loadWeatherByCoordinates(cityName, latitude, longitude, button = null) {
-        showStatus('Duke ngarkuar qytetin e ruajtur...', false, true);
+    async function loadWeatherByCoordinates(
+        cityName,
+        latitude,
+        longitude,
+        button = null,
+        countryName = '',
+        loadingMessage = 'Duke ngarkuar qytetin e ruajtur...'
+    ) {
+        showStatus(loadingMessage, false, true);
         weatherResult.innerHTML = renderWeatherSkeleton();
         saveCityForm.classList.add('hidden');
         setActiveSavedCity(button);
@@ -349,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const weatherData = await fetchWeather(latitude, longitude);
-            renderWeather(cityName, '', weatherData, latitude, longitude);
+            renderWeather(cityName, countryName, weatherData, latitude, longitude);
             showStatus('Të dhënat u ngarkuan me sukses.');
         } catch (error) {
             weatherResult.innerHTML = '';
@@ -359,11 +509,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function selectCitySuggestion(index) {
+        const cityData = cityMatches[index];
+
+        if (!cityData) {
+            return;
+        }
+
+        selectedCityMatch = cityData;
+        cityInput.value = getCityLabel(cityData);
+        hideCitySuggestions();
+        await loadWeatherByCoordinates(
+            cityData.name,
+            cityData.latitude,
+            cityData.longitude,
+            null,
+            cityData.country,
+            'Duke ngarkuar qytetin...'
+        );
+    }
+
     if (citySearchForm) {
         citySearchForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const cityName = cityInput.value.trim();
+
+            if (selectedCityMatch && cityName === getCityLabel(selectedCityMatch)) {
+                await loadWeatherByCoordinates(
+                    selectedCityMatch.name,
+                    selectedCityMatch.latitude,
+                    selectedCityMatch.longitude,
+                    null,
+                    selectedCityMatch.country,
+                    'Duke ngarkuar qytetin...'
+                );
+                return;
+            }
 
             if (!isValidCityName(cityName)) {
                 setActiveSavedCity();
@@ -372,6 +554,57 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             await loadWeatherByCityName(cityName);
+        });
+    }
+
+    if (cityInput && citySuggestions) {
+        cityInput.addEventListener('input', scheduleCitySuggestions);
+
+        cityInput.addEventListener('keydown', async (event) => {
+            const suggestionsVisible = !citySuggestions.classList.contains('hidden') && cityMatches.length > 0;
+
+            if (!suggestionsVisible && ['ArrowDown', 'ArrowUp', 'Escape'].includes(event.key)) {
+                return;
+            }
+
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                updateHighlightedSuggestion(highlightedSuggestionIndex + 1);
+            }
+
+            if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                updateHighlightedSuggestion(highlightedSuggestionIndex - 1);
+            }
+
+            if (event.key === 'Enter' && suggestionsVisible && highlightedSuggestionIndex >= 0) {
+                event.preventDefault();
+                await selectCitySuggestion(highlightedSuggestionIndex);
+            }
+
+            if (event.key === 'Escape') {
+                hideCitySuggestions();
+            }
+        });
+
+        citySuggestions.addEventListener('pointerdown', (event) => {
+            event.preventDefault();
+        });
+
+        citySuggestions.addEventListener('click', async (event) => {
+            const button = event.target.closest('.city-suggestion');
+
+            if (!button) {
+                return;
+            }
+
+            await selectCitySuggestion(Number(button.dataset.index));
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!citySearchForm.contains(event.target)) {
+                hideCitySuggestions();
+            }
         });
     }
 

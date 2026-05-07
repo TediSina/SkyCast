@@ -105,7 +105,20 @@ $errorMessage = getFlash('error');
 
                 <form id="citySearchForm" class="form form-inline">
                     <label for="cityInput">Qyteti</label>
-                    <input type="text" id="cityInput" placeholder="Shembull: Tirana" required>
+                    <div class="city-search-field">
+                        <input
+                            type="text"
+                            id="cityInput"
+                            placeholder="Shembull: Tirana"
+                            autocomplete="off"
+                            role="combobox"
+                            aria-autocomplete="list"
+                            aria-expanded="false"
+                            aria-controls="citySuggestions"
+                            required
+                        >
+                        <div id="citySuggestions" class="city-suggestions hidden" role="listbox"></div>
+                    </div>
                     <button type="submit" class="primary-btn">Kerko</button>
                 </form>
 
