@@ -162,5 +162,6 @@ $errorMessage = getFlash('error');
     </main>
 
     <script src="<?= e(appUrl('api/weather.js')) ?>"></script>
+    <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>

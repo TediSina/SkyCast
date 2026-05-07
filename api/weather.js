@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedCityName = document.getElementById('savedCityName');
     const savedLatitude = document.getElementById('savedLatitude');
     const savedLongitude = document.getElementById('savedLongitude');
+    const weatherSearchCard = document.querySelector('.weather-search-card');
+    const searchButton = citySearchForm?.querySelector('button[type="submit"]');
 
     function escapeHtml(value) {
         return String(value)
@@ -132,9 +134,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function showStatus(message, isError = false) {
+    function renderWeatherSkeleton() {
+        return `
+            <div class="weather-skeleton" aria-hidden="true">
+                <div class="skeleton-current"></div>
+                <div class="skeleton-row">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="skeleton-card"></div>
+            </div>
+        `;
+    }
+
+    function setActiveSavedCity(button = null) {
+        document.querySelectorAll('.saved-city-button.is-active').forEach((savedButton) => {
+            savedButton.classList.remove('is-active');
+        });
+
+        if (button) {
+            button.classList.add('is-active');
+        }
+    }
+
+    function setLoadingState(isLoading) {
+        weatherSearchCard?.classList.toggle('is-loading', isLoading);
+        searchButton?.classList.toggle('is-busy', isLoading);
+
+        if (searchButton) {
+            searchButton.disabled = isLoading;
+        }
+
+        document.querySelectorAll('.saved-city-button').forEach((button) => {
+            button.disabled = isLoading;
+        });
+    }
+
+    function showStatus(message, isError = false, isLoading = false) {
         weatherStatus.textContent = message;
-        weatherStatus.className = isError ? 'status-text error-text' : 'status-text';
+        weatherStatus.className = [
+            'status-text',
+            isError ? 'error-text' : '',
+            isLoading ? 'loading-text' : ''
+        ].filter(Boolean).join(' ');
     }
 
     function prepareSaveCity(cityName, latitude, longitude) {
@@ -153,11 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTime = current.time ? formatHour(current.time) : '-';
         const hourlyItems = getUpcomingHours(hourly, current.time);
 
-        const hourlyHtml = hourlyItems.length > 0 ? hourlyItems.map((hour) => {
+        const hourlyHtml = hourlyItems.length > 0 ? hourlyItems.map((hour, index) => {
             const meta = getWeatherMeta(hour.weatherCode);
 
             return `
-                <div class="hourly-card">
+                <div class="hourly-card" style="--delay: ${index * 45}ms">
                     <span class="hourly-time">${escapeHtml(formatHour(hour.time, current.time))}</span>
                     <span class="hourly-icon">${meta.icon}</span>
                     <strong>${formatMeasurement(hour.temperature, '°C')}</strong>
@@ -170,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const forecastHtml = daily.time.slice(0, 5).map((date, index) => {
             const meta = getWeatherMeta(daily.weather_code[index]);
             return `
-                <div class="forecast-day">
+                <div class="forecast-day" style="--delay: ${index * 70}ms">
                     <div class="forecast-icon">${meta.icon}</div>
                     <h4>${escapeHtml(formatDate(date))}</h4>
                     <p class="forecast-text">${escapeHtml(meta.text)}</p>
@@ -227,6 +271,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
+        weatherResult.classList.remove('weather-result-ready');
+        requestAnimationFrame(() => {
+            weatherResult.classList.add('weather-result-ready');
+        });
+
         prepareSaveCity(cityName, latitude, longitude);
     }
 
@@ -264,9 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function loadWeatherByCityName(cityName) {
-        showStatus('Duke kërkuar të dhënat e motit...');
-        weatherResult.innerHTML = '';
+        showStatus('Duke kërkuar të dhënat e motit...', false, true);
+        weatherResult.innerHTML = renderWeatherSkeleton();
         saveCityForm.classList.add('hidden');
+        setActiveSavedCity();
+        setLoadingState(true);
 
         try {
             const cityData = await fetchCoordinates(cityName);
@@ -282,21 +333,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showStatus('Të dhënat u ngarkuan me sukses.');
         } catch (error) {
+            weatherResult.innerHTML = '';
             showStatus(error.message, true);
+        } finally {
+            setLoadingState(false);
         }
     }
 
-    async function loadWeatherByCoordinates(cityName, latitude, longitude) {
-        showStatus('Duke ngarkuar qytetin e ruajtur...');
-        weatherResult.innerHTML = '';
+    async function loadWeatherByCoordinates(cityName, latitude, longitude, button = null) {
+        showStatus('Duke ngarkuar qytetin e ruajtur...', false, true);
+        weatherResult.innerHTML = renderWeatherSkeleton();
         saveCityForm.classList.add('hidden');
+        setActiveSavedCity(button);
+        setLoadingState(true);
 
         try {
             const weatherData = await fetchWeather(latitude, longitude);
             renderWeather(cityName, '', weatherData, latitude, longitude);
             showStatus('Të dhënat u ngarkuan me sukses.');
         } catch (error) {
+            weatherResult.innerHTML = '';
             showStatus(error.message, true);
+        } finally {
+            setLoadingState(false);
         }
     }
 
@@ -307,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cityName = cityInput.value.trim();
 
             if (!isValidCityName(cityName)) {
+                setActiveSavedCity();
                 showStatus('Shkruaj një emër qyteti të vlefshëm.', true);
                 return;
             }
@@ -321,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const latitude = button.dataset.lat;
             const longitude = button.dataset.lon;
 
-            await loadWeatherByCoordinates(cityName, latitude, longitude);
+            await loadWeatherByCoordinates(cityName, latitude, longitude, button);
         });
     });
 });

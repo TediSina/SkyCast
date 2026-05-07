@@ -141,5 +141,6 @@ require_once __DIR__ . '/includes/functions.php';
             </div>
         </section>
     </main>
+    <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>

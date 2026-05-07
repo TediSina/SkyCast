@@ -115,5 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </section>
         </div>
     </main>
+    <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>
