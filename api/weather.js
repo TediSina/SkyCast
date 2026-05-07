@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="hourly-icon">${meta.icon}</span>
                     <strong>${formatMeasurement(hour.temperature, '°C')}</strong>
                     <span>${escapeHtml(meta.text)}</span>
-                    <small>${formatMeasurement(hour.windSpeed, ' km/h')} · ${formatMeasurement(hour.precipitationProbability, '% shi')}</small>
+                    <small>${formatMeasurement(hour.windSpeed, ' km/h')} · ${formatMeasurement(hour.precipitationProbability, '% mundësi shiu')}</small>
                 </div>
             `;
         }).join('') : '<p class="empty-forecast">Nuk ka të dhëna orare për këtë vendndodhje.</p>';
@@ -319,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="forecast-icon">${meta.icon}</div>
                     <h4>${escapeHtml(formatDate(date))}</h4>
                     <p class="forecast-text">${escapeHtml(meta.text)}</p>
-                    <p><strong>Max:</strong> ${daily.temperature_2m_max[index]}°C</p>
+                    <p><strong>Maks:</strong> ${daily.temperature_2m_max[index]}°C</p>
                     <p><strong>Min:</strong> ${daily.temperature_2m_min[index]}°C</p>
                 </div>
             `;
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <section class="weather-current">
                     <div class="weather-top">
                         <div>
-                            <span class="section-kicker">Mot aktual</span>
+                            <span class="section-kicker">Moti aktual</span>
                             <h3>${escapeHtml(cityName)}${countryName ? ', ' + escapeHtml(countryName) : ''}</h3>
                             <p class="weather-description">${escapeHtml(currentMeta.text)}</p>
                             <div class="weather-temp">${formatMeasurement(current.temperature_2m, '°C')}</div>
@@ -357,8 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 </section>
 
                 <section class="forecast-section">
-                    <h4 class="forecast-title">Parashikimi ore pas ore</h4>
-                    <div class="hourly-forecast" aria-label="Parashikimi ore pas ore">
+                    <h4 class="forecast-title">Parashikimi orë pas ore</h4>
+                    <div class="hourly-forecast" aria-label="Parashikimi orë pas ore">
                         ${hourlyHtml}
                     </div>
                 </section>
@@ -444,9 +444,9 @@ document.addEventListener('DOMContentLoaded', () => {
             suggestionAbortController = new AbortController();
 
             try {
-                renderCitySuggestions([], 'Duke kerkuar qytete...');
+                renderCitySuggestions([], 'Duke kërkuar qytete...');
                 const matches = await fetchCityMatches(query, 6, suggestionAbortController.signal);
-                renderCitySuggestions(matches, 'Nuk u gjet asnje qytet.');
+                renderCitySuggestions(matches, 'Nuk u gjet asnjë qytet.');
             } catch (error) {
                 if (error.name !== 'AbortError') {
                     renderCitySuggestions([], 'Sugjerimet nuk u ngarkuan.');

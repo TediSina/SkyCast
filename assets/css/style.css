@@ -843,6 +843,7 @@ button.is-busy::after {
     padding: 11px 12px;
     border-radius: var(--radius);
     text-align: left;
+    justify-items: start;
 }
 
 .city-suggestion {
@@ -866,6 +867,7 @@ button.is-busy::after {
 .city-suggestion strong {
     font-size: 15px;
     line-height: 1.2;
+    text-align: left;
 }
 
 .city-suggestion span,
@@ -873,6 +875,7 @@ button.is-busy::after {
     color: var(--muted);
     font-size: 13px;
     line-height: 1.35;
+    text-align: left;
 }
 
 .city-suggestions-empty {

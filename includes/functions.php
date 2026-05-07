@@ -50,7 +50,7 @@ function isLoggedIn(): bool
 function requireLogin(): void
 {
     if (!isLoggedIn()) {
-        setFlash('error', 'Duhet te hysh ne sistem fillimisht.');
+        setFlash('error', 'Duhet të hysh në sistem fillimisht.');
         redirect(appUrl('pages/login.php'));
     }
 }

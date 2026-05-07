@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(value)) {
-            setFieldError(input, 'Vendos një email të vlefshëm.');
+            setFieldError(input, 'Vendos një e-mail të vlefshëm.');
             return false;
         }
         clearFieldError(input);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function validatePassword(input) {
         const value = input.value;
         if (value.length < 6) {
-            setFieldError(input, 'Password duhet të ketë të paktën 6 karaktere.');
+            setFieldError(input, 'Fjalëkalimi duhet të ketë të paktën 6 karaktere.');
             return false;
         }
         clearFieldError(input);
@@ -61,14 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function validateConfirmPassword(passwordInput, confirmInput) {
         if (confirmInput.value !== passwordInput.value) {
-            setFieldError(confirmInput, 'Password-et nuk përputhen.');
+            setFieldError(confirmInput, 'Fjalëkalimet nuk përputhen.');
             return false;
         }
         clearFieldError(confirmInput);
         return true;
     }
 
-    function validateRequiredPassword(input, message = 'Password nuk mund të jetë bosh.') {
+    function validateRequiredPassword(input, message = 'Fjalëkalimi nuk mund të jetë bosh.') {
         if (input.value.trim() === '') {
             setFieldError(input, message);
             return false;
@@ -79,8 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function validateDeleteConfirm(input) {
-        if (input.value.trim() !== 'DELETE') {
-            setFieldError(input, 'Shkruaj DELETE për të konfirmuar.');
+        if (input.value.trim() !== 'FSHI') {
+            setFieldError(input, 'Shkruaj FSHI për të konfirmuar.');
             return false;
         }
 
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emailInput.addEventListener('input', () => validateEmail(emailInput));
         passwordInput.addEventListener('input', () => {
             if (passwordInput.value.trim() === '') {
-                setFieldError(passwordInput, 'Password nuk mund të jetë bosh.');
+                setFieldError(passwordInput, 'Fjalëkalimi nuk mund të jetë bosh.');
                 return;
             }
             clearFieldError(passwordInput);
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let passwordOk = true;
             if (passwordInput.value.trim() === '') {
-                setFieldError(passwordInput, 'Password nuk mund të jetë bosh.');
+                setFieldError(passwordInput, 'Fjalëkalimi nuk mund të jetë bosh.');
                 passwordOk = false;
             } else {
                 clearFieldError(passwordInput);
@@ -192,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const newPasswordInput = document.getElementById('newPassword');
         const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
 
-        currentPasswordInput.addEventListener('input', () => validateRequiredPassword(currentPasswordInput, 'Password aktual nuk mund të jetë bosh.'));
+        currentPasswordInput.addEventListener('input', () => validateRequiredPassword(currentPasswordInput, 'Fjalëkalimi aktual nuk mund të jetë bosh.'));
         newPasswordInput.addEventListener('input', () => validatePassword(newPasswordInput));
         confirmNewPasswordInput.addEventListener('input', () => validateConfirmPassword(newPasswordInput, confirmNewPasswordInput));
 
         accountPasswordForm.addEventListener('submit', (event) => {
             const isValid =
-                validateRequiredPassword(currentPasswordInput, 'Password aktual nuk mund të jetë bosh.') &&
+                validateRequiredPassword(currentPasswordInput, 'Fjalëkalimi aktual nuk mund të jetë bosh.') &&
                 validatePassword(newPasswordInput) &&
                 validateConfirmPassword(newPasswordInput, confirmNewPasswordInput);
 
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (!window.confirm('Je i sigurt qe do ta fshish llogarine perfundimisht?')) {
+            if (!window.confirm('Je i sigurt që do ta fshish llogarinë përfundimisht?')) {
                 event.preventDefault();
             }
         });

@@ -18,26 +18,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
     if ($name === '' || strlen($name) < 2) {
-        $errors[] = 'Emri duhet te kete te pakten 2 karaktere.';
+        $errors[] = 'Emri duhet të ketë të paktën 2 karaktere.';
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Vendos nje email te vlefshem.';
+        $errors[] = 'Vendos një e-mail të vlefshëm.';
     }
 
     if (strlen($password) < 6) {
-        $errors[] = 'Password duhet te kete te pakten 6 karaktere.';
+        $errors[] = 'Fjalëkalimi duhet të ketë të paktën 6 karaktere.';
     }
 
     if ($password !== $confirmPassword) {
-        $errors[] = 'Password-et nuk perputhen.';
+        $errors[] = 'Fjalëkalimet nuk përputhen.';
     }
 
     if (empty($errors)) {
         $result = registerUser($name, $email, $password);
 
         if ($result['success']) {
-            setFlash('success', 'Regjistrimi u krye me sukses. Tani mund te besh login.');
+            setFlash('success', 'Regjistrimi u krye me sukses. Tani mund të hysh në sistem.');
             redirect(appUrl('pages/login.php'));
         }
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - SkyCast</title>
+    <title>Regjistrohu - SkyCast</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
     <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
@@ -60,16 +60,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <aside class="auth-visual" aria-label="Pamje e motit">
                 <a class="auth-logo" href="<?= e(appUrl()) ?>">SkyCast</a>
                 <div class="auth-forecast-card">
-                    <span>Tomorrow</span>
+                    <span>Nesër</span>
                     <strong>24°C</strong>
-                    <p>Ruaj qytetet e preferuara dhe kontrollo motin pa humbur kohe.</p>
+                    <p>Ruaj qytetet e preferuara dhe kontrollo motin pa humbur kohë.</p>
                 </div>
             </aside>
 
             <section class="auth-card">
-                <div class="auth-badge">Register</div>
+                <div class="auth-badge">Regjistrohu</div>
                 <h1>Krijo llogari</h1>
-                <p class="auth-subtitle">Nderto listen tende te qyteteve dhe hap parashikimin sa here te duhet.</p>
+                <p class="auth-subtitle">Ndërto listën tënde të qyteteve dhe hap parashikimin sa herë të duhet.</p>
 
                 <?php if (!empty($errors)): ?>
                     <div class="alert error">
@@ -88,29 +88,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="field-group">
-                        <label for="email">Email</label>
+                        <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
                     </div>
 
                     <div class="field-group">
-                        <label for="password">Password</label>
+                        <label for="password">Fjalëkalimi</label>
                         <input type="password" id="password" name="password" required>
                     </div>
 
                     <div class="field-group">
-                        <label for="confirm_password">Perserit password</label>
+                        <label for="confirm_password">Përsërit fjalëkalimin</label>
                         <input type="password" id="confirm_password" name="confirm_password" required>
                     </div>
 
-                    <button type="submit" class="primary-btn full-width">Register</button>
+                    <button type="submit" class="primary-btn full-width">Regjistrohu</button>
                 </form>
 
                 <p class="small-text">
-                    Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr ketu</a>
+                    Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr këtu</a>
                 </p>
 
                 <p class="small-text">
-                    <a href="<?= e(appUrl()) ?>">Kthehu te Home</a>
+                    <a href="<?= e(appUrl()) ?>">Kthehu te kryefaqja</a>
                 </p>
             </section>
         </div>

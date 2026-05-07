@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/functions.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyCast - Weather App</title>
+    <title>SkyCast - Aplikacion për Motin</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
 </head>
 <body class="home-page">
@@ -15,14 +15,14 @@ require_once __DIR__ . '/includes/functions.php';
         <div class="container nav">
             <h1 class="logo"><a href="<?= e(appUrl()) ?>">SkyCast</a></h1>
             <nav>
-                <a href="<?= e(appUrl()) ?>">Home</a>
+                <a href="<?= e(appUrl()) ?>">Kryefaqja</a>
                 <?php if (isLoggedIn()): ?>
-                    <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Dashboard</a>
-                    <a href="<?= e(appUrl('pages/account.php')) ?>">Account</a>
-                    <a href="<?= e(appUrl('logout.php')) ?>">Logout</a>
+                    <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Paneli</a>
+                    <a href="<?= e(appUrl('pages/account.php')) ?>">Llogaria</a>
+                    <a href="<?= e(appUrl('logout.php')) ?>">Dil</a>
                 <?php else: ?>
-                    <a href="<?= e(appUrl('pages/login.php')) ?>">Login</a>
-                    <a href="<?= e(appUrl('pages/register.php')) ?>" class="button-link">Register</a>
+                    <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr</a>
+                    <a href="<?= e(appUrl('pages/register.php')) ?>" class="button-link">Regjistrohu</a>
                 <?php endif; ?>
             </nav>
         </div>
@@ -32,39 +32,39 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="landing-hero">
             <div class="container landing-grid">
                 <div class="hero-copy">
-                    <span class="hero-badge">Weather Web App</span>
+                    <span class="hero-badge">Aplikacion web për motin</span>
                     <h2>SkyCast</h2>
                     <p>
-                        Mot aktual, parashikim ore pas ore dhe qytete te ruajtura ne nje eksperience te shpejte,
-                        te qarte dhe te ndertuar per perdorim te perditshem.
+                        Moti aktual, parashikim orë pas ore dhe qytete të ruajtura në një përvojë të shpejtë,
+                        të qartë dhe të ndërtuar për përdorim të përditshëm.
                     </p>
 
                     <div class="button-row">
                         <?php if (isLoggedIn()): ?>
-                            <a class="primary-btn" href="<?= e(appUrl('pages/dashboard.php')) ?>">Hap Dashboard</a>
+                            <a class="primary-btn" href="<?= e(appUrl('pages/dashboard.php')) ?>">Hap panelin</a>
                         <?php else: ?>
                             <a class="primary-btn" href="<?= e(appUrl('pages/register.php')) ?>">Fillo tani</a>
-                            <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr ne sistem</a>
+                            <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr në sistem</a>
                         <?php endif; ?>
                     </div>
 
                     <div class="hero-stats">
                         <div class="stat-card">
-                            <strong>12 ore</strong>
-                            <span>Parashikim i shpejte per pjesen tjeter te dites.</span>
+                            <strong>12 orë</strong>
+                            <span>Parashikim i shpejtë për pjesën tjetër të ditës.</span>
                         </div>
                         <div class="stat-card">
-                            <strong>5 dite</strong>
+                            <strong>5 ditë</strong>
                             <span>Temperatura maksimale, minimale dhe gjendja e motit.</span>
                         </div>
                         <div class="stat-card">
                             <strong>Qytete</strong>
-                            <span>Ruaji vendet qe ndjek me shpesh ne dashboard.</span>
+                            <span>Ruaji vendet që ndjek më shpesh në panel.</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="hero-panel" aria-label="Pamje e motit ne SkyCast">
+                <div class="hero-panel" aria-label="Pamje e motit në SkyCast">
                     <div class="sky-visual">
                         <div class="sun-disc"></div>
                         <div class="cloud"></div>
@@ -77,11 +77,11 @@ require_once __DIR__ . '/includes/functions.php';
 
                     <div class="preview-card">
                         <div class="preview-top">
-                            <span class="preview-city">Tirane</span>
+                            <span class="preview-city">Tiranë</span>
                             <span class="preview-icon">⛅</span>
                         </div>
                         <div class="preview-temp">22°C</div>
-                        <p class="preview-text">Pjeserisht me re · Ere 12 km/h</p>
+                        <p class="preview-text">Pjesërisht me re · Erë 12 km/h</p>
 
                         <div class="mini-forecast">
                             <div><span>09:00</span><strong>20°</strong></div>
@@ -97,28 +97,28 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="features-section">
             <div class="container">
                 <div class="section-heading">
-                    <span class="section-kicker">Forecast tools</span>
-                    <h3>Nje pamje e paster per motin qe te duhet.</h3>
-                    <p>SkyCast bashkon kerkimin, parashikimin orar dhe qytetet e ruajtura ne nje panel te lehte per t'u perdorur.</p>
+                    <span class="section-kicker">Mjetet e parashikimit</span>
+                    <h3>Një pamje e pastër për motin që të duhet.</h3>
+                    <p>SkyCast bashkon kërkimin, parashikimin orar dhe qytetet e ruajtura në një panel të lehtë për t'u përdorur.</p>
                 </div>
 
                 <div class="features-grid">
                     <article class="feature-card">
                         <div class="feature-icon">⏱️</div>
-                        <h4>Ore pas ore</h4>
-                        <p>Shiko ndryshimin e temperatures, eres dhe mundesine e shiut gjate dites.</p>
+                        <h4>Orë pas ore</h4>
+                        <p>Shiko ndryshimin e temperaturës, erës dhe mundësinë e shiut gjatë ditës.</p>
                     </article>
 
                     <article class="feature-card">
                         <div class="feature-icon">🌦️</div>
                         <h4>Parashikim ditor</h4>
-                        <p>Krahaso shpejt ditet e ardhshme me karta te lexueshme dhe te qarta.</p>
+                        <p>Krahaso shpejt ditët e ardhshme me karta të lexueshme dhe të qarta.</p>
                     </article>
 
                     <article class="feature-card">
                         <div class="feature-icon">📍</div>
-                        <h4>Qytete te ruajtura</h4>
-                        <p>Kthehu menjehere te qytetet qe ndjek me shpesh pa i kerkuar nga fillimi.</p>
+                        <h4>Qytete të ruajtura</h4>
+                        <p>Kthehu menjëherë te qytetet që ndjek më shpesh pa i kërkuar nga fillimi.</p>
                     </article>
                 </div>
             </div>
@@ -127,16 +127,16 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="cta-section">
             <div class="container cta-box">
                 <div>
-                    <h3>Gati per parashikimin tend?</h3>
-                    <p>Krijo llogari dhe mbaje motin e qyteteve te preferuara gjithmone afer.</p>
+                    <h3>Gati për parashikimin tënd?</h3>
+                    <p>Krijo llogari dhe mbaje motin e qyteteve të preferuara gjithmonë afër.</p>
                 </div>
 
                 <div class="button-row">
                     <?php if (isLoggedIn()): ?>
-                        <a class="primary-btn" href="<?= e(appUrl('pages/dashboard.php')) ?>">Shko te Dashboard</a>
+                        <a class="primary-btn" href="<?= e(appUrl('pages/dashboard.php')) ?>">Shko te paneli</a>
                     <?php else: ?>
                         <a class="primary-btn" href="<?= e(appUrl('pages/register.php')) ?>">Regjistrohu</a>
-                        <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Login</a>
+                        <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr</a>
                     <?php endif; ?>
                 </div>
             </div>

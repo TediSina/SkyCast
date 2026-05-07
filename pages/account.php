@@ -28,20 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $profileEmail = strtolower(trim($_POST['email'] ?? ''));
 
         if ($profileName === '' || strlen($profileName) < 2) {
-            $profileErrors[] = 'Emri duhet te kete te pakten 2 karaktere.';
+            $profileErrors[] = 'Emri duhet të ketë të paktën 2 karaktere.';
         }
 
         if (!filter_var($profileEmail, FILTER_VALIDATE_EMAIL)) {
-            $profileErrors[] = 'Vendos nje email te vlefshem.';
+            $profileErrors[] = 'Vendos një e-mail të vlefshëm.';
         }
 
         if ($profileEmail !== '' && emailBelongsToAnotherUser($profileEmail, (int) $user['id'])) {
-            $profileErrors[] = 'Ky email perdoret nga nje llogari tjeter.';
+            $profileErrors[] = 'Ky e-mail përdoret nga një llogari tjetër.';
         }
 
         if (empty($profileErrors)) {
             updateUserProfile((int) $user['id'], $profileName, $profileEmail);
-            setFlash('success', 'Te dhenat e llogarise u perditesuan.');
+            setFlash('success', 'Të dhënat e llogarisë u përditësuan.');
             redirect(appUrl('pages/account.php'));
         }
     }
@@ -52,20 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $confirmNewPassword = $_POST['confirm_new_password'] ?? '';
 
         if ($currentPassword === '' || !verifyUserPassword((int) $user['id'], $currentPassword)) {
-            $passwordErrors[] = 'Password aktual nuk eshte i sakte.';
+            $passwordErrors[] = 'Fjalëkalimi aktual nuk është i saktë.';
         }
 
         if (strlen($newPassword) < 6) {
-            $passwordErrors[] = 'Password i ri duhet te kete te pakten 6 karaktere.';
+            $passwordErrors[] = 'Fjalëkalimi i ri duhet të ketë të paktën 6 karaktere.';
         }
 
         if ($newPassword !== $confirmNewPassword) {
-            $passwordErrors[] = 'Password-et e reja nuk perputhen.';
+            $passwordErrors[] = 'Fjalëkalimet e reja nuk përputhen.';
         }
 
         if (empty($passwordErrors)) {
             updateUserPassword((int) $user['id'], $newPassword);
-            setFlash('success', 'Password u ndryshua me sukses.');
+            setFlash('success', 'Fjalëkalimi u ndryshua me sukses.');
             redirect(appUrl('pages/account.php'));
         }
     }
@@ -74,12 +74,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $deletePassword = $_POST['delete_password'] ?? '';
         $deleteConfirm = trim($_POST['delete_confirm'] ?? '');
 
-        if ($deleteConfirm !== 'DELETE') {
-            $deleteErrors[] = 'Shkruaj DELETE per te konfirmuar fshirjen.';
+        if ($deleteConfirm !== 'FSHI') {
+            $deleteErrors[] = 'Shkruaj FSHI për të konfirmuar fshirjen.';
         }
 
         if ($deletePassword === '' || !verifyUserPassword((int) $user['id'], $deletePassword)) {
-            $deleteErrors[] = 'Password nuk eshte i sakte.';
+            $deleteErrors[] = 'Fjalëkalimi nuk është i saktë.';
         }
 
         if (empty($deleteErrors)) {
@@ -91,14 +91,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $createdAt = strtotime((string) $user['created_at']);
-$createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
+$months = [
+    1 => 'Janar',
+    2 => 'Shkurt',
+    3 => 'Mars',
+    4 => 'Prill',
+    5 => 'Maj',
+    6 => 'Qershor',
+    7 => 'Korrik',
+    8 => 'Gusht',
+    9 => 'Shtator',
+    10 => 'Tetor',
+    11 => 'Nëntor',
+    12 => 'Dhjetor',
+];
+$createdLabel = $createdAt
+    ? date('d', $createdAt) . ' ' . $months[(int) date('n', $createdAt)] . ' ' . date('Y', $createdAt)
+    : 'N/A';
 ?>
 <!DOCTYPE html>
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account - SkyCast</title>
+    <title>Llogaria - SkyCast</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
     <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
@@ -107,10 +123,10 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
         <div class="container nav">
             <h1 class="logo"><a href="<?= e(appUrl()) ?>">SkyCast</a></h1>
             <nav>
-                <a href="<?= e(appUrl()) ?>">Home</a>
-                <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Dashboard</a>
-                <a href="<?= e(appUrl('pages/account.php')) ?>">Account</a>
-                <a href="<?= e(appUrl('logout.php')) ?>">Logout</a>
+                <a href="<?= e(appUrl()) ?>">Kryefaqja</a>
+                <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Paneli</a>
+                <a href="<?= e(appUrl('pages/account.php')) ?>">Llogaria</a>
+                <a href="<?= e(appUrl('logout.php')) ?>">Dil</a>
             </nav>
         </div>
     </header>
@@ -118,9 +134,9 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
     <main class="container account-page">
         <section class="account-hero">
             <div>
-                <span class="eyebrow">Account</span>
-                <h2>Profili yt ne SkyCast</h2>
-                <p>Shiko te dhenat e llogarise, perditeso identitetin, ndrysho password-in ose fshi llogarine kur nuk te duhet me.</p>
+                <span class="eyebrow">Llogaria</span>
+                <h2>Profili yt në SkyCast</h2>
+                <p>Shiko të dhënat e llogarisë, përditëso identitetin, ndrysho fjalëkalimin ose fshi llogarinë kur nuk të duhet më.</p>
             </div>
 
             <div class="account-avatar" aria-hidden="true">
@@ -135,7 +151,7 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
         <section class="card account-summary-card">
             <div class="card-heading">
                 <div>
-                    <span class="section-kicker">Te dhenat</span>
+                    <span class="section-kicker">Të dhënat</span>
                     <h3><?= e($user['name']) ?></h3>
                 </div>
             </div>
@@ -146,11 +162,11 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
                     <strong>#<?= (int) $user['id'] ?></strong>
                 </div>
                 <div class="account-metric">
-                    <span>Email</span>
+                    <span>E-mail</span>
                     <strong><?= e($user['email']) ?></strong>
                 </div>
                 <div class="account-metric">
-                    <span>Krijuar me</span>
+                    <span>Krijuar më</span>
                     <strong><?= e($createdLabel) ?></strong>
                 </div>
                 <div class="account-metric">
@@ -165,7 +181,7 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
                 <div class="card-heading">
                     <div>
                         <span class="section-kicker">Profili</span>
-                        <h3>Ndrysho te dhenat</h3>
+                        <h3>Ndrysho të dhënat</h3>
                     </div>
                 </div>
 
@@ -187,7 +203,7 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
                     </div>
 
                     <div class="field-group">
-                        <label for="accountEmail">Email</label>
+                        <label for="accountEmail">E-mail</label>
                         <input type="email" id="accountEmail" name="email" value="<?= e($profileEmail) ?>" required>
                     </div>
 
@@ -199,7 +215,7 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
                 <div class="card-heading">
                     <div>
                         <span class="section-kicker">Siguria</span>
-                        <h3>Ndrysho password-in</h3>
+                        <h3>Ndrysho fjalëkalimin</h3>
                     </div>
                 </div>
 
@@ -216,33 +232,33 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
                 <form method="POST" class="form" id="accountPasswordForm" novalidate>
                     <input type="hidden" name="action" value="update_password">
                     <div class="field-group">
-                        <label for="currentPassword">Password aktual</label>
+                        <label for="currentPassword">Fjalëkalimi aktual</label>
                         <input type="password" id="currentPassword" name="current_password" required>
                     </div>
 
                     <div class="field-group">
-                        <label for="newPassword">Password i ri</label>
+                        <label for="newPassword">Fjalëkalimi i ri</label>
                         <input type="password" id="newPassword" name="new_password" required>
                     </div>
 
                     <div class="field-group">
-                        <label for="confirmNewPassword">Perserit password-in e ri</label>
+                        <label for="confirmNewPassword">Përsërit fjalëkalimin e ri</label>
                         <input type="password" id="confirmNewPassword" name="confirm_new_password" required>
                     </div>
 
-                    <button type="submit" class="secondary-btn">Ndrysho password-in</button>
+                    <button type="submit" class="secondary-btn">Ndrysho fjalëkalimin</button>
                 </form>
             </section>
 
             <section class="card settings-card danger-zone">
                 <div class="card-heading">
                     <div>
-                        <span class="section-kicker">Zona e Rrezikut</span>
-                        <h3>Fshi llogarine</h3>
+                        <span class="section-kicker">Zona e rrezikut</span>
+                        <h3>Fshi llogarinë</h3>
                     </div>
                 </div>
 
-                <p>Fshirja e llogarise heq perfundimisht profilin dhe qytetet e ruajtura.</p>
+                <p>Fshirja e llogarisë heq përfundimisht profilin dhe qytetet e ruajtura.</p>
 
                 <?php if (!empty($deleteErrors)): ?>
                     <div class="alert error">
@@ -257,16 +273,16 @@ $createdLabel = $createdAt ? date('d M Y', $createdAt) : 'N/A';
                 <form method="POST" class="form" id="deleteAccountForm" novalidate>
                     <input type="hidden" name="action" value="delete_account">
                     <div class="field-group">
-                        <label for="deletePassword">Password</label>
+                        <label for="deletePassword">Fjalëkalimi</label>
                         <input type="password" id="deletePassword" name="delete_password" required>
                     </div>
 
                     <div class="field-group">
-                        <label for="deleteConfirm">Shkruaj DELETE</label>
+                        <label for="deleteConfirm">Shkruaj FSHI</label>
                         <input type="text" id="deleteConfirm" name="delete_confirm" required>
                     </div>
 
-                    <button type="submit" class="danger-btn">Fshi llogarine</button>
+                    <button type="submit" class="danger-btn">Fshi llogarinë</button>
                 </form>
             </section>
         </div>

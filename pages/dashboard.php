@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
             setFlash('success', 'Qyteti u ruajt me sukses.');
         } else {
-            setFlash('error', 'Te dhenat e qytetit nuk jane te vlefshme.');
+            setFlash('error', 'Të dhënat e qytetit nuk janë të vlefshme.');
         }
 
         redirect(appUrl('pages/dashboard.php'));
@@ -56,7 +56,7 @@ $errorMessage = getFlash('error');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SkyCast</title>
+    <title>Paneli - SkyCast</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
 </head>
 <body class="dashboard-body">
@@ -64,10 +64,10 @@ $errorMessage = getFlash('error');
         <div class="container nav">
             <h1 class="logo"><a href="<?= e(appUrl()) ?>">SkyCast</a></h1>
             <nav>
-                <a href="<?= e(appUrl()) ?>">Home</a>
-                <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Dashboard</a>
-                <a href="<?= e(appUrl('pages/account.php')) ?>">Account</a>
-                <a href="<?= e(appUrl('logout.php')) ?>">Logout</a>
+                <a href="<?= e(appUrl()) ?>">Kryefaqja</a>
+                <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Paneli</a>
+                <a href="<?= e(appUrl('pages/account.php')) ?>">Llogaria</a>
+                <a href="<?= e(appUrl('logout.php')) ?>">Dil</a>
             </nav>
         </div>
     </header>
@@ -75,14 +75,14 @@ $errorMessage = getFlash('error');
     <main class="container dashboard-page">
         <section class="dashboard-intro">
             <div>
-                <span class="eyebrow">Dashboard</span>
-                <h2>Mire se erdhe, <?= e($user['name']) ?>.</h2>
-                <p>Kerko nje qytet, shiko motin aktual, ndiq oret e ardhshme dhe ruaj vendet qe te interesojne.</p>
+                <span class="eyebrow">Paneli</span>
+                <h2>Mirë se erdhe, <?= e($user['name']) ?>.</h2>
+                <p>Kërko një qytet, shiko motin aktual, ndiq orët e ardhshme dhe ruaj vendet që të interesojnë.</p>
             </div>
 
             <div class="dashboard-weather-mark">
                 <span>☀️</span>
-                <strong>Live forecast</strong>
+                <strong>Parashikim drejtpërdrejt</strong>
             </div>
         </section>
 
@@ -90,7 +90,7 @@ $errorMessage = getFlash('error');
             <section class="card weather-search-card">
                 <div class="card-heading">
                     <div>
-                        <span class="section-kicker">Kerkim</span>
+                        <span class="section-kicker">Kërkim</span>
                         <h3>Kontrollo motin</h3>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ $errorMessage = getFlash('error');
                         <input
                             type="text"
                             id="cityInput"
-                            placeholder="Shembull: Tirana"
+                            placeholder="Shembull: Tiranë"
                             autocomplete="off"
                             role="combobox"
                             aria-autocomplete="list"
@@ -119,7 +119,7 @@ $errorMessage = getFlash('error');
                         >
                         <div id="citySuggestions" class="city-suggestions hidden" role="listbox"></div>
                     </div>
-                    <button type="submit" class="primary-btn">Kerko</button>
+                    <button type="submit" class="primary-btn">Kërko</button>
                 </form>
 
                 <div id="weatherStatus" class="status-text"></div>
@@ -130,7 +130,7 @@ $errorMessage = getFlash('error');
                     <input type="hidden" name="city_name" id="savedCityName">
                     <input type="hidden" name="latitude" id="savedLatitude">
                     <input type="hidden" name="longitude" id="savedLongitude">
-                    <button type="submit" class="secondary-btn">Ruaje kete qytet</button>
+                    <button type="submit" class="secondary-btn">Ruaje këtë qytet</button>
                 </form>
             </section>
 
@@ -145,8 +145,8 @@ $errorMessage = getFlash('error');
 
                 <?php if (empty($savedCities)): ?>
                     <div class="empty-state">
-                        <strong>Asnje qytet ende</strong>
-                        <span>Kerko nje qytet dhe ruaje per ta hapur me shpejt heren tjeter.</span>
+                        <strong>Asnjë qytet ende</strong>
+                        <span>Kërko një qytet dhe ruaje për ta hapur më shpejt herën tjetër.</span>
                     </div>
                 <?php else: ?>
                     <ul class="saved-city-list">
