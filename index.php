@@ -18,6 +18,7 @@ require_once __DIR__ . '/includes/functions.php';
                 <a href="<?= e(appUrl()) ?>">Home</a>
                 <?php if (isLoggedIn()): ?>
                     <a href="<?= e(appUrl('pages/dashboard.php')) ?>">Dashboard</a>
+                    <a href="<?= e(appUrl('pages/account.php')) ?>">Account</a>
                     <a href="<?= e(appUrl('logout.php')) ?>">Logout</a>
                 <?php else: ?>
                     <a href="<?= e(appUrl('pages/login.php')) ?>">Login</a>

@@ -68,6 +68,26 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    function validateRequiredPassword(input, message = 'Password nuk mund të jetë bosh.') {
+        if (input.value.trim() === '') {
+            setFieldError(input, message);
+            return false;
+        }
+
+        clearFieldError(input);
+        return true;
+    }
+
+    function validateDeleteConfirm(input) {
+        if (input.value.trim() !== 'DELETE') {
+            setFieldError(input, 'Shkruaj DELETE për të konfirmuar.');
+            return false;
+        }
+
+        clearFieldError(input);
+        return true;
+    }
+
     function validateCity(input) {
         const value = input.value.trim();
         const cityRegex = /^[A-Za-zÀ-ž\u00C0-\u024F\s'’-]{2,}$/;
@@ -144,6 +164,69 @@ document.addEventListener('DOMContentLoaded', () => {
 
         citySearchForm.addEventListener('submit', (event) => {
             if (!validateCity(cityInput)) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    const accountProfileForm = document.getElementById('accountProfileForm');
+    if (accountProfileForm) {
+        const nameInput = document.getElementById('accountName');
+        const emailInput = document.getElementById('accountEmail');
+
+        nameInput.addEventListener('input', () => validateName(nameInput));
+        emailInput.addEventListener('input', () => validateEmail(emailInput));
+
+        accountProfileForm.addEventListener('submit', (event) => {
+            const isValid = validateName(nameInput) && validateEmail(emailInput);
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    const accountPasswordForm = document.getElementById('accountPasswordForm');
+    if (accountPasswordForm) {
+        const currentPasswordInput = document.getElementById('currentPassword');
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+
+        currentPasswordInput.addEventListener('input', () => validateRequiredPassword(currentPasswordInput, 'Password aktual nuk mund të jetë bosh.'));
+        newPasswordInput.addEventListener('input', () => validatePassword(newPasswordInput));
+        confirmNewPasswordInput.addEventListener('input', () => validateConfirmPassword(newPasswordInput, confirmNewPasswordInput));
+
+        accountPasswordForm.addEventListener('submit', (event) => {
+            const isValid =
+                validateRequiredPassword(currentPasswordInput, 'Password aktual nuk mund të jetë bosh.') &&
+                validatePassword(newPasswordInput) &&
+                validateConfirmPassword(newPasswordInput, confirmNewPasswordInput);
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    const deleteAccountForm = document.getElementById('deleteAccountForm');
+    if (deleteAccountForm) {
+        const deletePasswordInput = document.getElementById('deletePassword');
+        const deleteConfirmInput = document.getElementById('deleteConfirm');
+
+        deletePasswordInput.addEventListener('input', () => validateRequiredPassword(deletePasswordInput));
+        deleteConfirmInput.addEventListener('input', () => validateDeleteConfirm(deleteConfirmInput));
+
+        deleteAccountForm.addEventListener('submit', (event) => {
+            const isValid =
+                validateRequiredPassword(deletePasswordInput) &&
+                validateDeleteConfirm(deleteConfirmInput);
+
+            if (!isValid) {
+                event.preventDefault();
+                return;
+            }
+
+            if (!window.confirm('Je i sigurt qe do ta fshish llogarine perfundimisht?')) {
                 event.preventDefault();
             }
         });

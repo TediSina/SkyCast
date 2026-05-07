@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
         '.cta-box',
         '.auth-layout',
         '.dashboard-intro',
+        '.account-hero',
+        '.account-summary-card',
         '.dashboard-grid > .card',
+        '.account-grid > .card',
         '.weather-card',
         '.forecast-section'
     ].join(',');
@@ -19,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '.auth-visual',
         '.auth-card',
         '.dashboard-weather-mark',
+        '.account-avatar',
+        '.account-summary-card',
         '.weather-current'
     ].join(',');
     const revealed = new WeakSet();

@@ -12,6 +12,31 @@ function findUserByEmail(string $email): ?array
     return $user ?: null;
 }
 
+function findUserById(int $userId): ?array
+{
+    $stmt = db()->prepare("SELECT * FROM users WHERE id = :id LIMIT 1");
+    $stmt->execute(['id' => $userId]);
+    $user = $stmt->fetch();
+
+    return $user ?: null;
+}
+
+function emailBelongsToAnotherUser(string $email, int $userId): bool
+{
+    $stmt = db()->prepare("
+        SELECT id
+        FROM users
+        WHERE email = :email AND id <> :id
+        LIMIT 1
+    ");
+    $stmt->execute([
+        'email' => strtolower(trim($email)),
+        'id'    => $userId,
+    ]);
+
+    return (bool) $stmt->fetch();
+}
+
 function registerUser(string $name, string $email, string $password): array
 {
     $name = trim($name);
@@ -59,6 +84,53 @@ function loginUser(string $email, string $password): bool
     $_SESSION['user_name'] = $user['name'];
 
     return true;
+}
+
+function verifyUserPassword(int $userId, string $password): bool
+{
+    $user = findUserById($userId);
+
+    if (!$user) {
+        return false;
+    }
+
+    return password_verify($password, $user['password']);
+}
+
+function updateUserProfile(int $userId, string $name, string $email): void
+{
+    $stmt = db()->prepare("
+        UPDATE users
+        SET name = :name,
+            email = :email
+        WHERE id = :id
+    ");
+    $stmt->execute([
+        'name'  => trim($name),
+        'email' => strtolower(trim($email)),
+        'id'    => $userId,
+    ]);
+
+    $_SESSION['user_name'] = trim($name);
+}
+
+function updateUserPassword(int $userId, string $password): void
+{
+    $stmt = db()->prepare("
+        UPDATE users
+        SET password = :password
+        WHERE id = :id
+    ");
+    $stmt->execute([
+        'password' => password_hash($password, PASSWORD_DEFAULT),
+        'id'       => $userId,
+    ]);
+}
+
+function deleteUserAccount(int $userId): void
+{
+    $stmt = db()->prepare("DELETE FROM users WHERE id = :id");
+    $stmt->execute(['id' => $userId]);
 }
 
 function logoutUser(): void
