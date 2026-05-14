@@ -286,10 +286,10 @@ button.is-busy::after {
     overflow: hidden;
     padding: 72px 0 92px;
     background:
-        linear-gradient(90deg, rgba(34, 37, 29, 0.92), rgba(34, 37, 29, 0.7) 42%, rgba(34, 37, 29, 0.18) 72%, rgba(247, 244, 234, 0.2)),
+        linear-gradient(90deg, rgba(18, 22, 18, 0.9), rgba(18, 22, 18, 0.72) 42%, rgba(18, 22, 18, 0.2) 72%, rgba(247, 244, 234, 0.08)),
         repeating-linear-gradient(90deg, rgba(183, 239, 84, 0.16) 0 1px, transparent 1px 80px),
         repeating-linear-gradient(0deg, rgba(255, 253, 246, 0.14) 0 1px, transparent 1px 80px),
-        linear-gradient(135deg, #27312d, #b9d1b8 58%, #f7f4ea);
+        url("../img/hero-radar-storm.png") center / cover no-repeat;
 }
 
 .landing-hero::before {
@@ -683,8 +683,9 @@ button.is-busy::after {
     padding: 30px;
     color: var(--paper-strong);
     background:
-        repeating-linear-gradient(90deg, rgba(183, 239, 84, 0.12) 0 1px, transparent 1px 58px),
-        linear-gradient(135deg, var(--charcoal), #25463f 72%, #7f8f4b);
+        linear-gradient(90deg, rgba(18, 22, 18, 0.88), rgba(18, 22, 18, 0.62), rgba(18, 22, 18, 0.34)),
+        repeating-linear-gradient(90deg, rgba(183, 239, 84, 0.1) 0 1px, transparent 1px 58px),
+        url("../img/dashboard-weather-desk.png") center / cover no-repeat;
     border: 1px solid rgba(255, 253, 246, 0.16);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
@@ -760,10 +761,11 @@ button.is-busy::after {
     padding: 28px;
     color: var(--paper-strong);
     background:
-        radial-gradient(circle at 58% 42%, transparent 0 68px, rgba(183, 239, 84, 0.22) 69px 70px, transparent 71px 138px, rgba(183, 239, 84, 0.16) 139px 140px, transparent 141px),
+        linear-gradient(180deg, rgba(12, 18, 18, 0.34), rgba(12, 18, 18, 0.72)),
+        radial-gradient(circle at 58% 42%, transparent 0 68px, rgba(183, 239, 84, 0.2) 69px 70px, transparent 71px 138px, rgba(183, 239, 84, 0.14) 139px 140px, transparent 141px),
         repeating-linear-gradient(90deg, rgba(183, 239, 84, 0.12) 0 1px, transparent 1px 42px),
         repeating-linear-gradient(0deg, rgba(183, 239, 84, 0.12) 0 1px, transparent 1px 42px),
-        linear-gradient(145deg, #1d241f, #264b43);
+        url("../img/auth-rain-observatory.png") center / cover no-repeat;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
 }
@@ -1010,8 +1012,9 @@ input:focus {
     padding: 26px;
     color: var(--paper-strong);
     background:
+        linear-gradient(90deg, rgba(18, 22, 18, 0.9), rgba(18, 22, 18, 0.68), rgba(18, 22, 18, 0.42)),
         repeating-linear-gradient(90deg, rgba(183, 239, 84, 0.12) 0 1px, transparent 1px 68px),
-        linear-gradient(135deg, var(--charcoal), #2b4d45 76%, #867e44);
+        url("../img/dashboard-weather-desk.png") center / cover no-repeat;
     border: 1px solid rgba(255, 253, 246, 0.16);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
@@ -1159,8 +1162,9 @@ input:focus {
     padding: 30px;
     color: var(--paper-strong);
     background:
+        linear-gradient(135deg, rgba(29, 36, 31, 0.92), rgba(3, 79, 85, 0.76) 68%, rgba(119, 110, 61, 0.58)),
         repeating-linear-gradient(90deg, rgba(255, 253, 246, 0.12) 0 1px, transparent 1px 54px),
-        linear-gradient(135deg, #1d241f, var(--chart-dark) 68%, #776e3d);
+        url("../img/weather-card-atlas.png") center / cover no-repeat;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
 }
@@ -1174,29 +1178,41 @@ input:focus {
 }
 
 .weather-card.theme-clear .weather-current {
-    background: linear-gradient(135deg, #1f3f39, var(--chart) 60%, var(--amber));
+    background:
+        linear-gradient(135deg, rgba(31, 63, 57, 0.84), rgba(4, 119, 122, 0.6) 60%, rgba(231, 163, 54, 0.44)),
+        url("../img/weather-card-atlas.png") 70% center / cover no-repeat;
 }
 
 .weather-card.theme-cloud .weather-current {
-    background: linear-gradient(135deg, #4f594e, #44746f 62%, #bbc7aa);
+    background:
+        linear-gradient(135deg, rgba(79, 89, 78, 0.86), rgba(68, 116, 111, 0.68) 62%, rgba(187, 199, 170, 0.5)),
+        url("../img/weather-card-atlas.png") center / cover no-repeat;
 }
 
 .weather-card.theme-rain .weather-current {
-    background: linear-gradient(135deg, #1d241f, #254c72 62%, var(--rain));
+    background:
+        linear-gradient(135deg, rgba(18, 22, 18, 0.9), rgba(37, 76, 114, 0.76) 62%, rgba(37, 111, 230, 0.52)),
+        url("../img/weather-card-atlas.png") left center / cover no-repeat;
 }
 
 .weather-card.theme-snow .weather-current {
     color: var(--ink);
-    background: linear-gradient(135deg, #dfe9e6, #f7f4ea 66%, #b9d8e2);
+    background:
+        linear-gradient(135deg, rgba(246, 249, 245, 0.86), rgba(247, 244, 234, 0.78) 66%, rgba(185, 216, 226, 0.7)),
+        url("../img/weather-card-atlas.png") center / cover no-repeat;
 }
 
 .weather-card.theme-storm .weather-current {
-    background: linear-gradient(135deg, #1b1d18, #4f3d48 62%, var(--coral));
+    background:
+        linear-gradient(135deg, rgba(18, 20, 16, 0.92), rgba(79, 61, 72, 0.78) 62%, rgba(232, 95, 79, 0.52)),
+        url("../img/weather-card-atlas.png") 28% center / cover no-repeat;
 }
 
 .weather-card.theme-fog .weather-current {
     color: var(--ink);
-    background: linear-gradient(135deg, #d7d6c9, #f2eedf 64%, #b5c8c6);
+    background:
+        linear-gradient(135deg, rgba(231, 231, 222, 0.86), rgba(242, 238, 223, 0.74) 64%, rgba(181, 200, 198, 0.7)),
+        url("../img/weather-card-atlas.png") center / cover no-repeat;
 }
 
 .weather-top,
@@ -1820,7 +1836,6 @@ input:focus {
         transform: none !important;
     }
 }
-
 @media (max-width: 1080px) {
     .landing-grid {
         min-height: auto;
@@ -1953,339 +1968,5 @@ input:focus {
 
     .tilt-card {
         transform: none !important;
-    }
-}
-
-@media (max-width: 980px) {
-    .landing-grid,
-    .auth-layout,
-    .dashboard-grid,
-    .account-grid,
-    .features-grid,
-    .hero-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .auth-visual {
-        min-height: 300px;
-    }
-
-    .saved-cities-card {
-        position: static;
-    }
-
-    .cta-box,
-    .dashboard-intro,
-    .account-hero,
-    .radar-top {
-        display: grid;
-    }
-
-    .account-metrics {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .radar-actions {
-        justify-content: flex-start;
-    }
-
-    .radar-controls {
-        grid-template-columns: auto minmax(160px, 1fr);
-    }
-}
-
-@media (max-width: 720px) {
-    .container {
-        width: min(100% - 28px, 1180px);
-    }
-
-    .nav {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 14px 0;
-    }
-
-    .landing-hero {
-        padding-top: 34px;
-    }
-
-    .hero-copy h2 {
-        font-size: clamp(48px, 17vw, 72px);
-    }
-
-    .mini-forecast,
-    .weather-main,
-    .form-inline {
-        grid-template-columns: 1fr;
-    }
-
-    .city-suggestions {
-        max-height: 260px;
-    }
-
-    .weather-top {
-        align-items: flex-start;
-    }
-
-    .dashboard-weather-mark {
-        width: 100%;
-        justify-items: start;
-    }
-
-    .account-avatar {
-        width: 100%;
-        height: 96px;
-    }
-
-    .account-metrics {
-        grid-template-columns: 1fr;
-    }
-
-    .saved-city-item {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .saved-city-button {
-        width: 100%;
-    }
-
-    .inline-form,
-    .inline-form .danger-btn {
-        width: 100%;
-    }
-
-    .radar-actions {
-        width: 100%;
-    }
-
-    .radar-actions .secondary-btn {
-        flex: 1 1 auto;
-    }
-
-    .reveal-on-scroll {
-        opacity: 1;
-        transform: none;
-    }
-
-    .tilt-card {
-        transform: none !important;
-    }
-}
-
-@media (max-width: 980px) {
-    .landing-grid,
-    .auth-layout,
-    .dashboard-grid,
-    .account-grid,
-    .features-grid,
-    .hero-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .auth-visual {
-        min-height: 300px;
-    }
-
-    .saved-cities-card {
-        position: static;
-    }
-
-    .cta-box,
-    .dashboard-intro,
-    .account-hero,
-    .radar-top {
-        display: grid;
-    }
-
-    .account-metrics {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .radar-actions {
-        justify-content: flex-start;
-    }
-
-    .radar-controls {
-        grid-template-columns: auto minmax(160px, 1fr);
-    }
-}
-
-@media (max-width: 720px) {
-    .container {
-        width: min(100% - 28px, 1180px);
-    }
-
-    .nav {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 14px 0;
-    }
-
-    .landing-hero {
-        padding-top: 34px;
-    }
-
-    .hero-copy h2 {
-        font-size: clamp(48px, 17vw, 72px);
-    }
-
-    .mini-forecast,
-    .weather-main,
-    .form-inline {
-        grid-template-columns: 1fr;
-    }
-
-    .city-suggestions {
-        max-height: 260px;
-    }
-
-    .weather-top {
-        align-items: flex-start;
-    }
-
-    .dashboard-weather-mark {
-        width: 100%;
-        justify-items: start;
-    }
-
-    .account-avatar {
-        width: 100%;
-        height: 96px;
-    }
-
-    .account-metrics {
-        grid-template-columns: 1fr;
-    }
-
-    .saved-city-item {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .saved-city-button {
-        width: 100%;
-    }
-
-    .inline-form,
-    .inline-form .danger-btn {
-        width: 100%;
-    }
-
-    .radar-actions {
-        width: 100%;
-    }
-
-    .radar-actions .secondary-btn {
-        flex: 1 1 auto;
-    }
-
-    .reveal-on-scroll {
-        opacity: 1;
-        transform: none;
-    }
-
-    .tilt-card {
-        transform: none !important;
-    }
-}
-
-@media (max-width: 980px) {
-    .landing-grid,
-    .auth-layout,
-    .dashboard-grid,
-    .account-grid,
-    .features-grid,
-    .hero-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .auth-visual {
-        min-height: 300px;
-    }
-
-    .saved-cities-card {
-        position: static;
-    }
-
-    .cta-box,
-    .dashboard-intro,
-    .account-hero,
-    .radar-top {
-        display: grid;
-    }
-
-    .account-metrics {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .radar-actions {
-        justify-content: flex-start;
-    }
-
-    .radar-controls {
-        grid-template-columns: auto minmax(160px, 1fr);
-    }
-}
-
-@media (max-width: 720px) {
-    .container {
-        width: min(100% - 28px, 1180px);
-    }
-
-    .nav {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 14px 0;
-    }
-
-    .landing-hero {
-        padding-top: 34px;
-    }
-
-    .hero-copy h2 {
-        font-size: clamp(48px, 17vw, 72px);
-    }
-
-    .mini-forecast,
-    .weather-main,
-    .form-inline {
-        grid-template-columns: 1fr;
-    }
-
-    .city-suggestions {
-        max-height: 260px;
-    }
-
-    .weather-top {
-        align-items: flex-start;
-    }
-
-    .dashboard-weather-mark {
-        width: 100%;
-        justify-items: start;
-    }
-
-    .account-avatar {
-        width: 100%;
-        height: 96px;
-    }
-
-    .account-metrics {
-        grid-template-columns: 1fr;
-    }
-
-    .saved-city-item {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .saved-city-button {
-        width: 100%;
-    }
-
-    .inline-form,
-    .inline-form .danger-btn {
-        width: 100%;
     }
 }
