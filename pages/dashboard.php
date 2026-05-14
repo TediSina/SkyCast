@@ -110,7 +110,7 @@ $errorMessage = getFlash('error');
                         <input
                             type="text"
                             id="cityInput"
-                            placeholder="Shembull: Tiranë"
+                            placeholder="Shembull: Tirana"
                             autocomplete="off"
                             role="combobox"
                             aria-autocomplete="list"

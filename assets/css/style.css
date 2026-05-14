@@ -1944,7 +1944,6 @@ input:focus {
     .radar-actions,
     .radar-actions .secondary-btn {
         width: 100%;
-important;
     }
 
     .reveal-on-scroll {
@@ -2062,7 +2061,6 @@ important;
 
     .radar-actions .secondary-btn {
         flex: 1 1 auto;
-important;
     }
 
     .reveal-on-scroll {
@@ -2180,7 +2178,6 @@ important;
 
     .radar-actions .secondary-btn {
         flex: 1 1 auto;
-1ms !important;
     }
 
     .reveal-on-scroll {
@@ -2291,4 +2288,4 @@ important;
     .inline-form .danger-btn {
         width: 100%;
     }
-
+}
