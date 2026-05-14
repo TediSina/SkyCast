@@ -175,6 +175,33 @@ $errorMessage = getFlash('error');
             </aside>
         </div>
 
+        <section
+            class="weather-news-panel"
+            data-weather-news
+            data-news-mode="city"
+            data-news-limit="5"
+        >
+            <div class="weather-news-panel-top">
+                <div>
+                    <span class="section-kicker">Lajme meteo</span>
+                    <h3>Çfarë po ndodh rreth motit</h3>
+                    <p data-news-context>Mbulim global në anglisht ose shqip derisa të zgjedhësh një qytet.</p>
+                </div>
+
+                <div class="weather-news-actions">
+                    <button type="button" class="secondary-btn weather-news-refresh" data-news-refresh>Rifresko</button>
+                </div>
+            </div>
+
+            <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme meteo</div>
+            <div class="weather-news-grid dashboard-news-grid" data-news-list></div>
+
+            <p class="weather-news-source">
+                Burimi: <a href="https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/" target="_blank" rel="noreferrer">GDELT DOC API</a>.
+                Titujt hapen në faqet origjinale.
+            </p>
+        </section>
+
         <section class="card radar-card" aria-labelledby="radarTitle">
             <div class="radar-top">
                 <div>
@@ -219,6 +246,7 @@ $errorMessage = getFlash('error');
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="<?= e(appUrl('api/weather.js')) ?>"></script>
+    <script src="<?= e(appUrl('assets/js/weather-news.js')) ?>"></script>
     <script src="<?= e(appUrl('assets/js/radar-map.js')) ?>"></script>
     <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>

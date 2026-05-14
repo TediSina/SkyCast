@@ -12,6 +12,10 @@ Harta e radarit përdor Leaflet dhe RainViewer:
 - `https://leafletjs.com`
 - `https://api.rainviewer.com/public/weather-maps.json`
 
+Lajmet meteo merren nga GDELT DOC API, një burim publik pa çelës API:
+
+- `https://api.gdeltproject.org/api/v2/doc/doc`
+
 ## Funksionalitetet
 
 - Regjistrim dhe hyrje në sistem për përdoruesit.
@@ -22,6 +26,8 @@ Harta e radarit përdor Leaflet dhe RainViewer:
 - Parashikim 5-ditor me temperatura minimale dhe maksimale.
 - Ruajtje dhe fshirje e qyteteve të preferuara.
 - Hartë interaktive me radar reshjesh, animacion kohor dhe fokusim te qyteti i kërkuar.
+- Lajme meteo në anglisht ose shqip.
+- Në panel, lajmet lidhen automatikisht me qytetin e zgjedhur kur ka artikuj të disponueshëm.
 - Faqe llogarie për përditësim profili, ndryshim fjalëkalimi dhe fshirje llogarie.
 
 ## Kërkesat
@@ -84,6 +90,7 @@ SkyCast/
 |   |   `-- style.css
 |   `-- js/
 |       |-- main.js
+|       |-- weather-news.js
 |       |-- radar-map.js
 |       `-- validation.js
 |-- db/
@@ -106,7 +113,7 @@ SkyCast/
 
 - Nuk nevojitet instalim paketash me Composer ose npm.
 - Nëse shfaqet gabim lidhjeje me databazën, sigurohu që `MySQL` është ndezur në XAMPP dhe që porta `3306` nuk është e zënë nga një shërbim tjetër.
-- Nëse të dhënat e motit nuk ngarkohen, kontrollo lidhjen me internetin dhe nëse shfletuesi mund të arrijë API-të e Open-Meteo.
+- Nëse të dhënat e motit ose lajmet nuk ngarkohen, kontrollo lidhjen me internetin dhe nëse shfletuesi mund të arrijë API-të e Open-Meteo dhe GDELT.
 
 ## Licenca
 

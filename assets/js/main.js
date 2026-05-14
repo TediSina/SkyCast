@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
         '.dashboard-grid > .card',
         '.account-grid > .card',
         '.radar-card',
+        '.weather-wire-shell',
+        '.weather-news-panel',
+        '.weather-news-card',
         '.weather-card',
         '.forecast-section'
     ].join(',');
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.dashboard-weather-mark',
         '.account-avatar',
         '.account-summary-card',
+        '.weather-news-card',
         '.weather-current'
     ].join(',');
     const revealed = new WeakSet();

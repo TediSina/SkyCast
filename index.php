@@ -137,6 +137,31 @@ require_once __DIR__ . '/includes/functions.php';
             </div>
         </section>
 
+        <section class="weather-wire-section">
+            <div
+                class="container weather-wire-shell"
+                data-weather-news
+                data-news-mode="global"
+                data-news-limit="6"
+            >
+                <div class="weather-wire-top">
+                    <div class="section-heading weather-wire-heading">
+                        <span class="section-kicker">Lajme meteo</span>
+                        <h3>Sinjale nga lajmet që lëvizin bashkë me motin.</h3>
+                        <p>Tituj të fundit që lidhen me motin, të filtruar vetëm në anglisht ose shqip.</p>
+                    </div>
+                </div>
+
+                <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme meteo</div>
+                <div class="weather-news-grid" data-news-list></div>
+
+                <div class="weather-news-footer">
+                    <span data-news-context>Mbulim global</span>
+                    <a href="https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/" target="_blank" rel="noreferrer">GDELT DOC API</a>
+                </div>
+            </div>
+        </section>
+
         <section class="cta-section">
             <div class="container cta-box">
                 <div>
@@ -155,6 +180,7 @@ require_once __DIR__ . '/includes/functions.php';
             </div>
         </section>
     </main>
+    <script src="<?= e(appUrl('assets/js/weather-news.js')) ?>"></script>
     <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>
