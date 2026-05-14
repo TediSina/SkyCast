@@ -1896,8 +1896,62 @@ input:focus {
     display: none;
 }
 
-.save-city-form {
-    margin-top: 16px;
+.save-city-form:not(.hidden) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 8px 0 16px;
+    padding: 12px;
+    overflow: hidden;
+    background:
+        linear-gradient(90deg, rgba(183, 239, 84, 0.2), rgba(255, 253, 246, 0.94)),
+        repeating-linear-gradient(90deg, rgba(4, 119, 122, 0.1) 0 1px, transparent 1px 34px);
+    border: 1px solid rgba(4, 119, 122, 0.24);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    animation: cardPop 0.34s ease both;
+}
+
+.save-city-form::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at center, var(--paper-strong) 0 24%, transparent 25%),
+        conic-gradient(from 20deg, var(--radar), var(--chart) 44%, var(--amber) 72%, var(--radar));
+    box-shadow: 4px 4px 0 rgba(35, 38, 30, 0.12);
+}
+
+.save-city-copy {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+}
+
+.save-city-copy span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.save-city-copy strong {
+    color: var(--ink);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 22px;
+    line-height: 1;
+    overflow-wrap: anywhere;
+}
+
+.save-city-form .secondary-btn {
+    flex: 0 0 auto;
+    min-height: 40px;
+    background: var(--paper-strong);
 }
 
 .empty-state {
@@ -2400,6 +2454,16 @@ input:focus {
     .weather-news-actions,
     .weather-news-refresh,
     .footer-signal {
+        width: 100%;
+    }
+
+    .save-city-form:not(.hidden) {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .save-city-form .secondary-btn {
+        grid-column: 1 / -1;
         width: 100%;
     }
 

@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedCityName = document.getElementById('savedCityName');
     const savedLatitude = document.getElementById('savedLatitude');
     const savedLongitude = document.getElementById('savedLongitude');
+    const saveCityLabel = document.getElementById('saveCityLabel');
+    const saveCityButton = saveCityForm?.querySelector('button[type="submit"]');
     const weatherSearchCard = document.querySelector('.weather-search-card');
     const searchButton = citySearchForm?.querySelector('button[type="submit"]');
     const citySuggestions = document.getElementById('citySuggestions');
@@ -282,10 +284,28 @@ document.addEventListener('DOMContentLoaded', () => {
         ].filter(Boolean).join(' ');
     }
 
-    function prepareSaveCity(cityName, latitude, longitude) {
+    function hideSaveCityAction() {
+        saveCityForm.classList.add('hidden');
+
+        if (saveCityLabel) {
+            saveCityLabel.textContent = '';
+        }
+
+        saveCityButton?.removeAttribute('aria-label');
+    }
+
+    function prepareSaveCity(cityName, countryName, latitude, longitude) {
+        const cityLabel = [cityName, countryName].filter(Boolean).join(', ');
+
         savedCityName.value = cityName;
         savedLatitude.value = latitude;
         savedLongitude.value = longitude;
+
+        if (saveCityLabel) {
+            saveCityLabel.textContent = cityLabel;
+        }
+
+        saveCityButton?.setAttribute('aria-label', `Ruaje ${cityLabel} në listën e qyteteve`);
         saveCityForm.classList.remove('hidden');
     }
 
@@ -377,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
             weatherResult.classList.add('weather-result-ready');
         });
 
-        prepareSaveCity(cityName, latitude, longitude);
+        prepareSaveCity(cityName, countryName, latitude, longitude);
 
         document.dispatchEvent(new CustomEvent('skycast:city-selected', {
             detail: {
@@ -467,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadWeatherByCityName(cityName) {
         showStatus('Duke kërkuar të dhënat e motit...', false, true);
         weatherResult.innerHTML = renderWeatherSkeleton();
-        saveCityForm.classList.add('hidden');
+        hideSaveCityAction();
         setActiveSavedCity();
         setLoadingState(true);
 
@@ -502,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
         showStatus(loadingMessage, false, true);
         weatherResult.innerHTML = renderWeatherSkeleton();
-        saveCityForm.classList.add('hidden');
+        hideSaveCityAction();
         setActiveSavedCity(button);
         setLoadingState(true);
 

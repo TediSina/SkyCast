@@ -123,16 +123,21 @@ $errorMessage = getFlash('error');
                     <button type="submit" class="primary-btn">Kërko</button>
                 </form>
 
-                <div id="weatherStatus" class="status-text"></div>
-                <div id="weatherResult"></div>
+                <div id="weatherStatus" class="status-text" role="status" aria-live="polite"></div>
 
-                <form id="saveCityForm" method="POST" class="save-city-form hidden">
+                <form id="saveCityForm" method="POST" class="save-city-form hidden" aria-label="Ruaj qytetin e zgjedhur" aria-live="polite">
                     <input type="hidden" name="action" value="save_city">
                     <input type="hidden" name="city_name" id="savedCityName">
                     <input type="hidden" name="latitude" id="savedLatitude">
                     <input type="hidden" name="longitude" id="savedLongitude">
+                    <div class="save-city-copy">
+                        <span>Qyteti i zgjedhur</span>
+                        <strong id="saveCityLabel"></strong>
+                    </div>
                     <button type="submit" class="secondary-btn">Ruaje këtë qytet</button>
                 </form>
+
+                <div id="weatherResult"></div>
             </section>
 
             <aside class="card saved-cities-card">

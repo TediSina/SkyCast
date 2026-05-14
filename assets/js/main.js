@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.dashboard-weather-mark',
         '.account-avatar',
         '.account-summary-card',
+        '.save-city-form',
         '.weather-news-card',
         '.weather-current',
         '.footer-signal'
