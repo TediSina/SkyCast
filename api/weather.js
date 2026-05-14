@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
             .replaceAll("'", '&#039;');
     }
 
-    function getWeatherMeta(code) {
+    function isNightValue(isDay) {
+        return isDay === 0 || isDay === '0' || isDay === false;
+    }
+
+    function getWeatherMeta(code, isDay = 1) {
         if (code === undefined || code === null) {
             return { text: 'Pa të dhëna', icon: '🌍' };
         }
@@ -63,7 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
             99: { text: 'Stuhi me breshër të fortë', icon: '⛈️' }
         };
 
-        return map[code] || { text: `Kodi i motit: ${code}`, icon: '🌍' };
+        const meta = map[code] || { text: `Kodi i motit: ${code}`, icon: '🌍' };
+        const nightIcons = {
+            0: '🌙',
+            1: '🌙',
+            2: '🌙',
+            51: '🌧️',
+            53: '🌧️',
+            61: '🌧️',
+            80: '🌧️'
+        };
+
+        if (isNightValue(isDay) && nightIcons[code]) {
+            return { ...meta, icon: nightIcons[code] };
+        }
+
+        return meta;
     }
 
     function getWeatherTheme(code) {
@@ -138,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIndex = firstUpcomingIndex >= 0 ? firstUpcomingIndex : 0;
         const temperatures = Array.isArray(hourly.temperature_2m) ? hourly.temperature_2m : [];
         const weatherCodes = Array.isArray(hourly.weather_code) ? hourly.weather_code : [];
+        const isDayValues = Array.isArray(hourly.is_day) ? hourly.is_day : [];
         const windSpeeds = Array.isArray(hourly.wind_speed_10m) ? hourly.wind_speed_10m : [];
         const precipitationProbabilities = Array.isArray(hourly.precipitation_probability)
             ? hourly.precipitation_probability
@@ -150,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 time,
                 temperature: temperatures[index],
                 weatherCode: weatherCodes[index],
+                isDay: isDayValues[index],
                 windSpeed: windSpeeds[index],
                 precipitationProbability: precipitationProbabilities[index]
             };
@@ -603,13 +624,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const current = data.current;
         const hourly = data.hourly;
         const daily = data.daily;
-        const currentMeta = getWeatherMeta(current.weather_code);
+        const currentMeta = getWeatherMeta(current.weather_code, current.is_day);
         const currentTheme = getWeatherTheme(current.weather_code);
         const currentTime = current.time ? formatHour(current.time) : '-';
         const hourlyItems = getUpcomingHours(hourly, current.time);
 
         const hourlyHtml = hourlyItems.length > 0 ? hourlyItems.map((hour, index) => {
-            const meta = getWeatherMeta(hour.weatherCode);
+            const meta = getWeatherMeta(hour.weatherCode, hour.isDay);
 
             return `
                 <div class="hourly-card" style="--delay: ${index * 45}ms">
@@ -725,7 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchWeather(latitude, longitude) {
-        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,weather_code&hourly=temperature_2m,weather_code,wind_speed_10m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5&timezone=auto`;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,weather_code,is_day&hourly=temperature_2m,weather_code,is_day,wind_speed_10m,precipitation_probability&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5&timezone=auto`;
         const response = await fetch(url);
 
         if (!response.ok) {
