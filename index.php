@@ -148,7 +148,7 @@ require_once __DIR__ . '/includes/functions.php';
                     <div class="section-heading weather-wire-heading">
                         <span class="section-kicker">Lajme meteo</span>
                         <h3>Sinjale nga lajmet që lëvizin bashkë me motin.</h3>
-                        <p>Tituj të fundit që lidhen me motin, të filtruar vetëm në anglisht ose shqip.</p>
+                        <p>Tituj të fundit që lidhen me motin, me përparësi të plotë për burime në shqip.</p>
                     </div>
 
                     <div class="weather-news-actions">
@@ -160,7 +160,7 @@ require_once __DIR__ . '/includes/functions.php';
                 <div class="weather-news-grid" data-news-list></div>
 
                 <div class="weather-news-footer">
-                    <span data-news-context>Mbulim global</span>
+                    <span data-news-context>Mbulim global · Shqip</span>
                     <a href="https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/" target="_blank" rel="noreferrer">GDELT DOC API</a>
                 </div>
             </div>

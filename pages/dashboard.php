@@ -190,7 +190,7 @@ $errorMessage = getFlash('error');
                 <div>
                     <span class="section-kicker">Lajme meteo</span>
                     <h3>Çfarë po ndodh rreth motit</h3>
-                    <p data-news-context>Mbulim global në anglisht ose shqip derisa të zgjedhësh një qytet.</p>
+                    <p data-news-context>Mbulim global në shqip derisa të zgjedhësh një qytet.</p>
                 </div>
 
                 <div class="weather-news-actions">

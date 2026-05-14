@@ -8,41 +8,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const apiUrl = 'https://api.gdeltproject.org/api/v2/doc/doc';
     const feedMeta = {
         label: 'Moti',
-        symbol: 'WX',
-        query: '("weather forecast" OR "severe weather" OR "weather warning" OR meteorology OR meteorological OR rainfall OR flooding OR heatwave OR snowstorm OR thunderstorm OR hurricane OR cyclone OR drought OR "cold snap")'
+        symbol: 'WX'
     };
-    const queryTiers = [
-        feedMeta.query,
+    const primaryQueryTiers = [
+        '("parashikimi i motit" OR "moti sot" OR "moti nesër" OR meteorologji OR reshje OR përmbytje OR permbytje OR vapë OR vapa OR borë OR bore OR stuhi OR furtunë OR uragan OR ciklon OR thatësirë OR thatesire OR ngrica OR rrebeshe OR temperatura)',
+        '(moti OR klima OR temperaturat OR reshje OR shi OR borë OR bore OR stuhi OR era OR "mot i keq")'
+    ];
+    const fallbackQueryTiers = [
+        '("weather forecast" OR "severe weather" OR "weather warning" OR meteorology OR meteorological OR rainfall OR flooding OR heatwave OR snowstorm OR thunderstorm OR hurricane OR cyclone OR drought OR "cold snap")',
         '(weather OR forecast OR storm OR rainfall OR flooding OR heatwave OR snowstorm OR thunderstorm OR hurricane OR cyclone OR drought OR climate)'
     ];
-    const allowedLanguages = [
-        { operator: 'english', label: 'Anglisht' },
-        { operator: 'albanian', label: 'Shqip' }
-    ];
-    const reserveArticles = [
+    const primaryLanguage = { operator: 'albanian', label: 'Shqip' };
+    const fallbackLanguage = { operator: 'english', label: 'Anglisht' };
+    const primaryReserveArticles = [
         {
-            title: 'NSSL News: severe weather research and radar updates',
+            title: 'MeteoAlb: Parashikimi i motit',
+            url: 'https://meteoalb.com/category/parashikimi-motit/',
+            domain: 'meteoalb.com',
+            country: 'Shqipëri',
+            language: 'Shqip'
+        },
+        {
+            title: 'MeteoAlb: Meteorologji',
+            url: 'https://meteoalb.com/category/meteorologji/',
+            domain: 'meteoalb.com',
+            country: 'Shqipëri',
+            language: 'Shqip'
+        },
+        {
+            title: 'MeteoAlb: Moti dhe klima',
+            url: 'https://meteoalb.com/category/moti-dhe-klima/',
+            domain: 'meteoalb.com',
+            country: 'Shqipëri',
+            language: 'Shqip'
+        }
+    ];
+    const fallbackReserveArticles = [
+        {
+            title: 'NOAA NSSL: kërkime dhe lajme për motin ekstrem',
             url: 'https://inside.nssl.noaa.gov/nsslnews/',
             domain: 'inside.nssl.noaa.gov',
             country: 'United States',
             language: 'Anglisht'
         },
         {
-            title: 'News Around NOAA from the National Weather Service',
+            title: 'National Weather Service: lajme dhe njoftime meteo',
             url: 'https://www.weather.gov/news/headlines/index.html',
             domain: 'weather.gov',
             country: 'United States',
             language: 'Anglisht'
         },
         {
-            title: 'WMO latest weather, climate and water news',
+            title: 'WMO: lajme për motin, klimën dhe ujin',
             url: 'https://wmo.int/type-of-news/news',
             domain: 'wmo.int',
             country: 'Global',
             language: 'Anglisht'
         },
         {
-            title: 'NOAA NCEI climate and environmental news',
+            title: 'NOAA NCEI: lajme për klimën dhe mjedisin',
             url: 'https://www.ncei.noaa.gov/news',
             domain: 'ncei.noaa.gov',
             country: 'United States',
@@ -185,7 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function getReserveArticles(limit) {
+    function getReserveArticles(limit, useFallbackLanguage = false) {
+        const reserveArticles = useFallbackLanguage ? fallbackReserveArticles : primaryReserveArticles;
+
         return reserveArticles.slice(0, limit).map((article) => ({
             ...article,
             image: '',
@@ -193,6 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
             sortTime: 0,
             isReserve: true
         }));
+    }
+
+    function fillWithReserveArticles(articles, limit, useFallbackLanguage = false) {
+        if (articles.length >= limit) {
+            return articles.slice(0, limit);
+        }
+
+        return uniqueArticles([
+            ...articles,
+            ...getReserveArticles(limit, useFallbackLanguage)
+        ]).slice(0, limit);
     }
 
     async function fetchLanguageArticles(widget, language, limit, signal, baseQuery, includeCity = true) {
@@ -214,21 +251,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return normalizeArticles(Array.isArray(data.articles) ? data.articles : [], language);
     }
 
-    async function fetchArticles(widget, limit, signal, includeCity = true) {
+    async function fetchArticles(widget, limit, signal, includeCity = true, useFallbackLanguage = false) {
+        const language = useFallbackLanguage ? fallbackLanguage : primaryLanguage;
+        const queryTiers = useFallbackLanguage ? fallbackQueryTiers : primaryQueryTiers;
         let lastError = null;
         let hadSuccessfulRequest = false;
 
         for (const baseQuery of queryTiers) {
-            const articleResults = await Promise.allSettled(
-                allowedLanguages.map((language) => fetchLanguageArticles(
+            const articleResults = await Promise.allSettled([
+                fetchLanguageArticles(
                     widget,
                     language,
                     limit,
                     signal,
                     baseQuery,
                     includeCity
-                ))
-            );
+                )
+            ]);
             const articleGroups = articleResults
                 .filter((result) => result.status === 'fulfilled')
                 .map((result) => result.value);
@@ -382,13 +421,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setBusy(widget, true);
         setStatus(widget, loadingLabel, false, true);
-        setContext(widget, cityLabel ? `Lajme moti për ${cityLabel} · Anglisht/Shqip` : 'Mbulim global · Anglisht/Shqip');
+        setContext(widget, cityLabel ? `Lajme moti për ${cityLabel} · Shqip` : 'Mbulim global · Shqip');
         renderSkeleton(widget, limit);
 
         try {
             let articles = await fetchArticles(widget, limit, abortController.signal);
             let usedFallback = false;
             let usedReserve = false;
+            let usedEnglish = false;
 
             if (cityName && articles.length === 0) {
                 usedFallback = true;
@@ -404,16 +444,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 articles = getReserveArticles(limit);
             }
 
+            if (articles.length === 0) {
+                usedEnglish = true;
+                articles = await fetchArticles(widget, limit, abortController.signal, false, true);
+            }
+
+            if (articles.length === 0) {
+                usedReserve = true;
+                articles = getReserveArticles(limit, true);
+            }
+
+            articles = fillWithReserveArticles(articles, limit, usedEnglish);
+
             renderArticles(widget, articles);
-            setStatus(widget, usedReserve
-                ? `U shfaqën ${articles.length} burime meteo rezervë.`
-                : `U ngarkuan ${articles.length} tituj moti.`
+            setStatus(widget, usedEnglish
+                ? `U shfaqën ${articles.length} burime meteo rezervë në anglisht.`
+                : (usedReserve
+                    ? `U shfaqën ${articles.length} burime meteo në shqip.`
+                    : `U ngarkuan ${articles.length} tituj moti në shqip.`
+                )
             );
-            setContext(widget, usedReserve
-                ? 'Burime të qëndrueshme meteo · Anglisht'
-                : (usedFallback
-                ? `Pak tituj për ${cityLabel}; shfaqet mbulim global · Anglisht/Shqip`
-                : (cityLabel ? `Lajme moti për ${cityLabel} · Anglisht/Shqip` : 'Mbulim global · Anglisht/Shqip')
+            setContext(widget, usedEnglish
+                ? 'Burime rezervë · Anglisht'
+                : (usedReserve
+                    ? 'Burime të qëndrueshme meteo · Shqip'
+                    : (usedFallback
+                        ? `Pak tituj për ${cityLabel}; shfaqet mbulim global · Shqip`
+                        : (cityLabel ? `Lajme moti për ${cityLabel} · Shqip` : 'Mbulim global · Shqip')
+                    )
                 )
             );
         } catch (error) {
@@ -423,8 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const reserve = getReserveArticles(limit);
             renderArticles(widget, reserve);
-            setStatus(widget, 'Burimi live nuk u arrit; po shfaqen burime meteo rezervë.');
-            setContext(widget, 'Burime të qëndrueshme meteo · Anglisht');
+            setStatus(widget, 'Burimi live nuk u arrit; po shfaqen burime meteo në shqip.');
+            setContext(widget, 'Burime të qëndrueshme meteo · Shqip');
         } finally {
             if (!abortController.signal.aborted) {
                 setBusy(widget, false);
