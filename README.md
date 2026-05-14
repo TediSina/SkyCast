@@ -26,7 +26,7 @@ Lajmet meteo merren nga GDELT DOC API, një burim publik pa çelës API:
 - Parashikim 5-ditor me temperatura minimale dhe maksimale.
 - Ruajtje dhe fshirje e qyteteve të preferuara.
 - Hartë interaktive me radar reshjesh, animacion kohor dhe fokusim te qyteti i kërkuar.
-- Lajme meteo në anglisht ose shqip.
+- Lajme meteo në anglisht ose shqip, me burime rezervë nëse feed-i live nuk përgjigjet.
 - Në panel, lajmet lidhen automatikisht me qytetin e zgjedhur kur ka artikuj të disponueshëm.
 - Footer i përbashkët me navigim dhe burimet kryesore të të dhënave.
 - Faqe llogarie për përditësim profili, ndryshim fjalëkalimi dhe fshirje llogarie.

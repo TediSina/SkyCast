@@ -150,6 +150,10 @@ require_once __DIR__ . '/includes/functions.php';
                         <h3>Sinjale nga lajmet që lëvizin bashkë me motin.</h3>
                         <p>Tituj të fundit që lidhen me motin, të filtruar vetëm në anglisht ose shqip.</p>
                     </div>
+
+                    <div class="weather-news-actions">
+                        <button type="button" class="secondary-btn weather-news-refresh" data-news-refresh>Rifresko</button>
+                    </div>
                 </div>
 
                 <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme meteo</div>

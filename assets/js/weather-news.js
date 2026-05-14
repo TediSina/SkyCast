@@ -11,9 +11,43 @@ document.addEventListener('DOMContentLoaded', () => {
         symbol: 'WX',
         query: '("weather forecast" OR "severe weather" OR "weather warning" OR meteorology OR meteorological OR rainfall OR flooding OR heatwave OR snowstorm OR thunderstorm OR hurricane OR cyclone OR drought OR "cold snap")'
     };
+    const queryTiers = [
+        feedMeta.query,
+        '(weather OR forecast OR storm OR rainfall OR flooding OR heatwave OR snowstorm OR thunderstorm OR hurricane OR cyclone OR drought OR climate)'
+    ];
     const allowedLanguages = [
         { operator: 'english', label: 'Anglisht' },
         { operator: 'albanian', label: 'Shqip' }
+    ];
+    const reserveArticles = [
+        {
+            title: 'NSSL News: severe weather research and radar updates',
+            url: 'https://inside.nssl.noaa.gov/nsslnews/',
+            domain: 'inside.nssl.noaa.gov',
+            country: 'United States',
+            language: 'Anglisht'
+        },
+        {
+            title: 'News Around NOAA from the National Weather Service',
+            url: 'https://www.weather.gov/news/headlines/index.html',
+            domain: 'weather.gov',
+            country: 'United States',
+            language: 'Anglisht'
+        },
+        {
+            title: 'WMO latest weather, climate and water news',
+            url: 'https://wmo.int/type-of-news/news',
+            domain: 'wmo.int',
+            country: 'Global',
+            language: 'Anglisht'
+        },
+        {
+            title: 'NOAA NCEI climate and environmental news',
+            url: 'https://www.ncei.noaa.gov/news',
+            domain: 'ncei.noaa.gov',
+            country: 'United States',
+            language: 'Anglisht'
+        }
     ];
     const widgetState = new WeakMap();
     const dateFormatter = new Intl.DateTimeFormat('sq-AL', {
@@ -105,13 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return cleaned.includes(' ') ? `"${cleaned.replaceAll('"', '')}"` : cleaned;
     }
 
-    function buildQuery(widget, language) {
-        const cityTerm = widget.dataset.newsMode === 'city'
+    function buildQuery(widget, language, baseQuery, includeCity = true) {
+        const cityTerm = includeCity && widget.dataset.newsMode === 'city'
             ? getCityQueryTerm(widget.dataset.newsCity)
             : '';
         const cityQuery = cityTerm ? ` ${cityTerm}` : '';
 
-        return `${feedMeta.query}${cityQuery} sourcelang:${language.operator}`;
+        return `${baseQuery}${cityQuery} sourcelang:${language.operator}`;
     }
 
     function normalizeArticles(articles, language) {
@@ -151,9 +185,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function fetchLanguageArticles(widget, language, limit, signal) {
+    function getReserveArticles(limit) {
+        return reserveArticles.slice(0, limit).map((article) => ({
+            ...article,
+            image: '',
+            date: 'Burim i vazhdueshëm',
+            sortTime: 0,
+            isReserve: true
+        }));
+    }
+
+    async function fetchLanguageArticles(widget, language, limit, signal, baseQuery, includeCity = true) {
         const url = new URL(apiUrl);
-        url.searchParams.set('query', buildQuery(widget, language));
+        url.searchParams.set('query', buildQuery(widget, language, baseQuery, includeCity));
         url.searchParams.set('mode', 'artlist');
         url.searchParams.set('format', 'json');
         url.searchParams.set('sort', 'datedesc');
@@ -170,22 +214,50 @@ document.addEventListener('DOMContentLoaded', () => {
         return normalizeArticles(Array.isArray(data.articles) ? data.articles : [], language);
     }
 
-    async function fetchArticles(widget, limit, signal) {
-        const articleResults = await Promise.allSettled(
-            allowedLanguages.map((language) => fetchLanguageArticles(widget, language, limit, signal))
-        );
-        const articleGroups = articleResults
-            .filter((result) => result.status === 'fulfilled')
-            .map((result) => result.value);
+    async function fetchArticles(widget, limit, signal, includeCity = true) {
+        let lastError = null;
+        let hadSuccessfulRequest = false;
 
-        if (articleGroups.length === 0) {
+        for (const baseQuery of queryTiers) {
+            const articleResults = await Promise.allSettled(
+                allowedLanguages.map((language) => fetchLanguageArticles(
+                    widget,
+                    language,
+                    limit,
+                    signal,
+                    baseQuery,
+                    includeCity
+                ))
+            );
+            const articleGroups = articleResults
+                .filter((result) => result.status === 'fulfilled')
+                .map((result) => result.value);
             const rejectedResult = articleResults.find((result) => result.status === 'rejected');
-            throw rejectedResult?.reason || new Error('Lajmet nuk u ngarkuan.');
+
+            if (rejectedResult) {
+                lastError = rejectedResult.reason;
+            }
+
+            if (articleGroups.length === 0) {
+                continue;
+            }
+
+            hadSuccessfulRequest = true;
+
+            const articles = uniqueArticles(articleGroups.flat())
+                .sort((first, second) => second.sortTime - first.sortTime)
+                .slice(0, limit);
+
+            if (articles.length > 0) {
+                return articles;
+            }
         }
 
-        return uniqueArticles(articleGroups.flat())
-            .sort((first, second) => second.sortTime - first.sortTime)
-            .slice(0, limit);
+        if (!hadSuccessfulRequest && lastError) {
+            throw lastError;
+        }
+
+        return [];
     }
 
     function setStatus(widget, message, isError = false, isLoading = false) {
@@ -264,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const countryLabel = article.country ? escapeHtml(article.country) : '';
 
             return `
-                <article class="weather-news-card ${mediaClass}" style="--delay: ${index * 55}ms">
+                <article class="weather-news-card ${mediaClass}${article.isReserve ? ' is-reserve' : ''}" style="--delay: ${index * 55}ms">
                     <a href="${escapeHtml(article.url)}" target="_blank" rel="noreferrer">
                         <div class="weather-news-media">
                             ${article.image ? `<img src="${escapeHtml(article.image)}" alt="">` : ''}
@@ -316,17 +388,11 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let articles = await fetchArticles(widget, limit, abortController.signal);
             let usedFallback = false;
+            let usedReserve = false;
 
             if (cityName && articles.length === 0) {
                 usedFallback = true;
-                try {
-                    widget.dataset.newsCity = '';
-                    widget.dataset.newsCountry = '';
-                    articles = await fetchArticles(widget, limit, abortController.signal);
-                } finally {
-                    widget.dataset.newsCity = cityName;
-                    widget.dataset.newsCountry = countryName;
-                }
+                articles = await fetchArticles(widget, limit, abortController.signal, false);
             }
 
             if (abortController.signal.aborted) {
@@ -334,27 +400,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (articles.length === 0) {
-                renderEmpty(widget, cityName
-                    ? `Nuk u gjetën artikuj moti në anglisht ose shqip për ${cityLabel}.`
-                    : 'GDELT nuk ktheu artikuj moti në anglisht ose shqip.'
-                );
-                setStatus(widget, 'Nuk u gjetën tituj moti për këtë kërkim.', true);
-                return;
+                usedReserve = true;
+                articles = getReserveArticles(limit);
             }
 
             renderArticles(widget, articles);
-            setStatus(widget, `U ngarkuan ${articles.length} tituj moti.`);
-            setContext(widget, usedFallback
+            setStatus(widget, usedReserve
+                ? `U shfaqën ${articles.length} burime meteo rezervë.`
+                : `U ngarkuan ${articles.length} tituj moti.`
+            );
+            setContext(widget, usedReserve
+                ? 'Burime të qëndrueshme meteo · Anglisht'
+                : (usedFallback
                 ? `Pak tituj për ${cityLabel}; shfaqet mbulim global · Anglisht/Shqip`
                 : (cityLabel ? `Lajme moti për ${cityLabel} · Anglisht/Shqip` : 'Mbulim global · Anglisht/Shqip')
+                )
             );
         } catch (error) {
             if (error.name === 'AbortError') {
                 return;
             }
 
-            renderEmpty(widget, 'Lidhja me burimin e lajmeve nuk u arrit tani.');
-            setStatus(widget, 'Lajmet nuk u ngarkuan. Provo përsëri pas pak.', true);
+            const reserve = getReserveArticles(limit);
+            renderArticles(widget, reserve);
+            setStatus(widget, 'Burimi live nuk u arrit; po shfaqen burime meteo rezervë.');
+            setContext(widget, 'Burime të qëndrueshme meteo · Anglisht');
         } finally {
             if (!abortController.signal.aborted) {
                 setBusy(widget, false);

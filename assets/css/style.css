@@ -791,6 +791,16 @@ button.is-busy::after {
     box-shadow: 0 24px 50px rgba(7, 18, 18, 0.24);
 }
 
+.weather-news-card.is-reserve {
+    border-color: rgba(231, 163, 54, 0.54);
+}
+
+.weather-news-card.is-reserve .weather-news-symbol {
+    color: var(--ink);
+    background: var(--amber);
+    border-color: rgba(35, 38, 30, 0.18);
+}
+
 .weather-news-card a {
     height: 100%;
     display: grid;
