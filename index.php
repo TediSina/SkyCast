@@ -32,11 +32,11 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="landing-hero">
             <div class="container landing-grid">
                 <div class="hero-copy">
-                    <span class="hero-badge">Aplikacion web për motin</span>
+                    <span class="hero-badge">Aplikacion web për motin dhe radar reshjesh</span>
                     <h2>SkyCast</h2>
                     <p>
-                        Moti aktual, parashikim orë pas ore dhe qytete të ruajtura në një përvojë të shpejtë,
-                        të qartë dhe të ndërtuar për përdorim të përditshëm.
+                        Moti aktual, parashikim orë pas ore, radar reshjesh dhe qytete të ruajtura në një panel
+                        të shpejtë, të qartë dhe të ndërtuar për përdorim të përditshëm.
                     </p>
 
                     <div class="button-row">
@@ -58,6 +58,10 @@ require_once __DIR__ . '/includes/functions.php';
                             <span>Temperatura maksimale, minimale dhe gjendja e motit.</span>
                         </div>
                         <div class="stat-card">
+                            <strong>Radar</strong>
+                            <span>Shiko lëvizjen e reshjeve në hartë interaktive.</span>
+                        </div>
+                        <div class="stat-card">
                             <strong>Qytete</strong>
                             <span>Ruaji vendet që ndjek më shpesh në panel.</span>
                         </div>
@@ -66,6 +70,9 @@ require_once __DIR__ . '/includes/functions.php';
 
                 <div class="hero-panel" aria-label="Pamje e motit në SkyCast">
                     <div class="sky-visual">
+                        <div class="radar-sweep" aria-hidden="true"></div>
+                        <div class="radar-blip radar-blip-one" aria-hidden="true"></div>
+                        <div class="radar-blip radar-blip-two" aria-hidden="true"></div>
                         <div class="sun-disc"></div>
                         <div class="cloud"></div>
                         <div class="rain-lines">
@@ -98,8 +105,8 @@ require_once __DIR__ . '/includes/functions.php';
             <div class="container">
                 <div class="section-heading">
                     <span class="section-kicker">Mjetet e parashikimit</span>
-                    <h3>Një pamje e pastër për motin që të duhet.</h3>
-                    <p>SkyCast bashkon kërkimin, parashikimin orar dhe qytetet e ruajtura në një panel të lehtë për t'u përdorur.</p>
+                    <h3>Një pamje e plotë për motin që të duhet.</h3>
+                    <p>SkyCast bashkon kërkimin, parashikimin orar, radarin e reshjeve dhe qytetet e ruajtura në një panel të lehtë për t'u përdorur.</p>
                 </div>
 
                 <div class="features-grid">
@@ -113,6 +120,12 @@ require_once __DIR__ . '/includes/functions.php';
                         <div class="feature-icon">🌦️</div>
                         <h4>Parashikim ditor</h4>
                         <p>Krahaso shpejt ditët e ardhshme me karta të lexueshme dhe të qarta.</p>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">◉</div>
+                        <h4>Radar reshjesh</h4>
+                        <p>Ndiq në hartë intensitetin e reshjeve dhe lëvizjen e tyre në kohë.</p>
                     </article>
 
                     <article class="feature-card">
