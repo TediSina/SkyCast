@@ -156,6 +156,241 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function getNumericValue(value) {
+        const number = Number(value);
+        return Number.isFinite(number) ? number : null;
+    }
+
+    function getMetricRange(values, minFloor = null, maxCeiling = null) {
+        const numericValues = values.map(getNumericValue).filter((value) => value !== null);
+
+        if (numericValues.length === 0) {
+            return null;
+        }
+
+        let min = Math.min(...numericValues);
+        let max = Math.max(...numericValues);
+
+        if (minFloor !== null) {
+            min = Math.min(min, minFloor);
+        }
+
+        if (maxCeiling !== null) {
+            max = Math.max(max, maxCeiling);
+        }
+
+        if (min === max) {
+            min -= 1;
+            max += 1;
+        }
+
+        return { min, max };
+    }
+
+    function getMetricStats(values, fallbackSuffix = '') {
+        const numericValues = values.map(getNumericValue).filter((value) => value !== null);
+
+        if (numericValues.length === 0) {
+            return {
+                min: '-',
+                max: '-',
+                average: '-'
+            };
+        }
+
+        const min = Math.min(...numericValues);
+        const max = Math.max(...numericValues);
+        const average = numericValues.reduce((total, value) => total + value, 0) / numericValues.length;
+
+        return {
+            min: `${Math.round(min)}${fallbackSuffix}`,
+            max: `${Math.round(max)}${fallbackSuffix}`,
+            average: `${Math.round(average)}${fallbackSuffix}`
+        };
+    }
+
+    function getChartPoints(items, key, range) {
+        const width = 640;
+        const height = 220;
+        const left = 36;
+        const right = width - 20;
+        const top = 18;
+        const bottom = height - 36;
+        const usableWidth = right - left;
+        const usableHeight = bottom - top;
+        const denominator = Math.max(items.length - 1, 1);
+
+        return items.map((item, index) => {
+            const value = getNumericValue(item[key]);
+
+            if (value === null) {
+                return null;
+            }
+
+            const x = left + (usableWidth * index / denominator);
+            const y = bottom - ((value - range.min) / (range.max - range.min) * usableHeight);
+
+            return {
+                x: Number(x.toFixed(2)),
+                y: Number(y.toFixed(2)),
+                value,
+                label: formatHour(item.time)
+            };
+        }).filter(Boolean);
+    }
+
+    function renderGridLines() {
+        return [18, 73.33, 128.66, 184].map((y) => `
+            <line class="chart-grid-line" x1="36" y1="${y}" x2="620" y2="${y}"></line>
+        `).join('');
+    }
+
+    function renderAxisLabels(items) {
+        if (items.length === 0) {
+            return '';
+        }
+
+        const labelIndexes = [0, Math.floor((items.length - 1) / 2), items.length - 1];
+        const uniqueIndexes = [...new Set(labelIndexes)];
+
+        return uniqueIndexes.map((itemIndex) => {
+            const x = 36 + ((620 - 36) * itemIndex / Math.max(items.length - 1, 1));
+            return `<text class="chart-axis-label" x="${x.toFixed(2)}" y="212">${escapeHtml(formatHour(items[itemIndex].time))}</text>`;
+        }).join('');
+    }
+
+    function renderLineGraph(items, key, unit, variant, minFloor = null, maxCeiling = null) {
+        const values = items.map((item) => item[key]);
+        const range = getMetricRange(values, minFloor, maxCeiling);
+
+        if (!range) {
+            return '';
+        }
+
+        const points = getChartPoints(items, key, range);
+
+        if (points.length < 2) {
+            return '';
+        }
+
+        const linePath = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+        const areaPath = `M 36 184 L ${points.map((point) => `${point.x} ${point.y}`).join(' L ')} L 620 184 Z`;
+        const pointHtml = points.map((point) => `
+            <circle class="chart-point" cx="${point.x}" cy="${point.y}" r="4">
+                <title>${escapeHtml(point.label)}: ${Math.round(point.value)}${escapeHtml(unit)}</title>
+            </circle>
+        `).join('');
+
+        return `
+            <svg class="metric-chart ${variant}" viewBox="0 0 640 220" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="none">
+                ${renderGridLines()}
+                <path class="chart-area" d="${areaPath}"></path>
+                <path class="chart-line" d="${linePath}"></path>
+                ${pointHtml}
+                ${renderAxisLabels(items)}
+            </svg>
+        `;
+    }
+
+    function renderBarGraph(items, key) {
+        const values = items.map((item) => item[key]);
+        const range = getMetricRange(values, 0, 100);
+
+        if (!range) {
+            return '';
+        }
+
+        const width = 640;
+        const left = 36;
+        const right = width - 20;
+        const bottom = 184;
+        const top = 18;
+        const usableWidth = right - left;
+        const gap = 7;
+        const barWidth = Math.max((usableWidth / items.length) - gap, 12);
+
+        const bars = items.map((item, index) => {
+            const value = getNumericValue(item[key]);
+
+            if (value === null) {
+                return '';
+            }
+
+            const x = left + (usableWidth * index / items.length) + (gap / 2);
+            const barHeight = ((value - range.min) / (range.max - range.min)) * (bottom - top);
+            const y = bottom - barHeight;
+
+            return `
+                <rect class="chart-bar" x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${barWidth.toFixed(2)}" height="${Math.max(barHeight, 2).toFixed(2)}" rx="5">
+                    <title>${escapeHtml(formatHour(item.time))}: ${Math.round(value)}%</title>
+                </rect>
+            `;
+        }).join('');
+
+        return `
+            <svg class="metric-chart rain-bars" viewBox="0 0 640 220" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="none">
+                ${renderGridLines()}
+                ${bars}
+                ${renderAxisLabels(items)}
+            </svg>
+        `;
+    }
+
+    function renderWeatherGraphs(hourlyItems) {
+        if (hourlyItems.length < 2) {
+            return `
+                <section class="forecast-section weather-graphs-section">
+                    <h4 class="forecast-title">Grafikët e motit</h4>
+                    <p class="empty-forecast">Nuk ka mjaftueshëm të dhëna orare për grafikë.</p>
+                </section>
+            `;
+        }
+
+        const temperatureStats = getMetricStats(hourlyItems.map((item) => item.temperature), '°');
+        const precipitationStats = getMetricStats(hourlyItems.map((item) => item.precipitationProbability), '%');
+        const windStats = getMetricStats(hourlyItems.map((item) => item.windSpeed), ' km/h');
+
+        return `
+            <section class="forecast-section weather-graphs-section">
+                <div class="graphs-heading">
+                    <div>
+                        <span class="section-kicker">Grafikë</span>
+                        <h4 class="forecast-title">Lexim vizual për 12 orët e ardhshme</h4>
+                    </div>
+                </div>
+
+                <div class="weather-graphs-grid">
+                    <article class="weather-graph-card temperature-graph">
+                        <div class="graph-card-top">
+                            <span>Temperatura</span>
+                            <strong>${escapeHtml(temperatureStats.min)} / ${escapeHtml(temperatureStats.max)}</strong>
+                        </div>
+                        ${renderLineGraph(hourlyItems, 'temperature', '°C', 'temperature-line')}
+                        <p>Mesatarja: <strong>${escapeHtml(temperatureStats.average)}</strong></p>
+                    </article>
+
+                    <article class="weather-graph-card rain-graph">
+                        <div class="graph-card-top">
+                            <span>Mundësia e shiut</span>
+                            <strong>${escapeHtml(precipitationStats.max)}</strong>
+                        </div>
+                        ${renderBarGraph(hourlyItems, 'precipitationProbability')}
+                        <p>Piku i reshjeve: <strong>${escapeHtml(precipitationStats.max)}</strong></p>
+                    </article>
+
+                    <article class="weather-graph-card wind-graph">
+                        <div class="graph-card-top">
+                            <span>Era</span>
+                            <strong>${escapeHtml(windStats.max)}</strong>
+                        </div>
+                        ${renderLineGraph(hourlyItems, 'windSpeed', ' km/h', 'wind-line', 0)}
+                        <p>Mesatarja: <strong>${escapeHtml(windStats.average)}</strong></p>
+                    </article>
+                </div>
+            </section>
+        `;
+    }
+
     function renderWeatherSkeleton() {
         return `
             <div class="weather-skeleton" aria-hidden="true">
@@ -187,6 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         citySuggestions.classList.add('hidden');
         citySuggestions.innerHTML = '';
+        weatherSearchCard?.classList.remove('has-open-suggestions');
         highlightedSuggestionIndex = -1;
         cityInput?.removeAttribute('aria-activedescendant');
         setSuggestionExpanded(false);
@@ -226,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? `<p class="city-suggestions-empty">${escapeHtml(message)}</p>`
                 : '';
             citySuggestions.classList.toggle('hidden', !message);
+            weatherSearchCard?.classList.toggle('has-open-suggestions', Boolean(message));
             setSuggestionExpanded(Boolean(message));
             return;
         }
@@ -245,6 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         citySuggestions.classList.remove('hidden');
+        weatherSearchCard?.classList.add('has-open-suggestions');
         setSuggestionExpanded(true);
     }
 
@@ -375,6 +613,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 </section>
+
+                ${renderWeatherGraphs(hourlyItems)}
 
                 <section class="forecast-section">
                     <h4 class="forecast-title">Parashikimi orë pas ore</h4>

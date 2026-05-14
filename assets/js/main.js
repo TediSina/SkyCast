@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.dashboard-grid > .card',
         '.account-grid > .card',
         '.radar-card',
+        '.weather-graph-card',
         '.weather-wire-shell',
         '.weather-news-panel',
         '.weather-news-card',
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.account-avatar',
         '.account-summary-card',
         '.save-city-form',
+        '.weather-graph-card',
         '.weather-news-card',
         '.weather-current',
         '.footer-signal'

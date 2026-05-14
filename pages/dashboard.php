@@ -136,8 +136,6 @@ $errorMessage = getFlash('error');
                     </div>
                     <button type="submit" class="secondary-btn">Ruaje këtë qytet</button>
                 </form>
-
-                <div id="weatherResult"></div>
             </section>
 
             <aside class="card saved-cities-card">
@@ -179,6 +177,8 @@ $errorMessage = getFlash('error');
                 <?php endif; ?>
             </aside>
         </div>
+
+        <div id="weatherResult" class="weather-output-stage"></div>
 
         <section
             class="weather-news-panel"

@@ -22,6 +22,7 @@ Lajmet meteo merren nga GDELT DOC API, një burim publik pa çelës API:
 - Panel personal për kërkimin e motit sipas qytetit.
 - Sugjerime qytetesh gjatë kërkimit.
 - Shfaqje e motit aktual, erës dhe gjendjes së motit.
+- Grafikë për temperaturën, mundësinë e shiut dhe erën për 12 orët e ardhshme.
 - Parashikim orë pas ore për 12 orët e ardhshme.
 - Parashikim 5-ditor me temperatura minimale dhe maksimale.
 - Ruajtje dhe fshirje e qyteteve të preferuara.
