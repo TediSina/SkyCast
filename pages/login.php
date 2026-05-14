@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </section>
         </div>
     </main>
+    <?php require __DIR__ . '/../includes/footer.php'; ?>
     <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>

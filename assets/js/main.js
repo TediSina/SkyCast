@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '.weather-news-panel',
         '.weather-news-card',
         '.weather-card',
-        '.forecast-section'
+        '.forecast-section',
+        '.site-footer'
     ].join(',');
     const tiltSelector = [
         '.sky-visual',
@@ -29,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '.account-avatar',
         '.account-summary-card',
         '.weather-news-card',
-        '.weather-current'
+        '.weather-current',
+        '.footer-signal'
     ].join(',');
     const revealed = new WeakSet();
     const tilted = new WeakSet();

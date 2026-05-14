@@ -180,6 +180,7 @@ require_once __DIR__ . '/includes/functions.php';
             </div>
         </section>
     </main>
+    <?php require __DIR__ . '/includes/footer.php'; ?>
     <script src="<?= e(appUrl('assets/js/weather-news.js')) ?>"></script>
     <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>

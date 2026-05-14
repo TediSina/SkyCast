@@ -244,6 +244,8 @@ $errorMessage = getFlash('error');
         </section>
     </main>
 
+    <?php require __DIR__ . '/../includes/footer.php'; ?>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="<?= e(appUrl('api/weather.js')) ?>"></script>
     <script src="<?= e(appUrl('assets/js/weather-news.js')) ?>"></script>

@@ -288,6 +288,8 @@ $createdLabel = $createdAt
         </div>
     </main>
 
+    <?php require __DIR__ . '/../includes/footer.php'; ?>
+
     <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>

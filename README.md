@@ -28,6 +28,7 @@ Lajmet meteo merren nga GDELT DOC API, një burim publik pa çelës API:
 - Hartë interaktive me radar reshjesh, animacion kohor dhe fokusim te qyteti i kërkuar.
 - Lajme meteo në anglisht ose shqip.
 - Në panel, lajmet lidhen automatikisht me qytetin e zgjedhur kur ka artikuj të disponueshëm.
+- Footer i përbashkët me navigim dhe burimet kryesore të të dhënave.
 - Faqe llogarie për përditësim profili, ndryshim fjalëkalimi dhe fshirje llogarie.
 
 ## Kërkesat
@@ -97,6 +98,7 @@ SkyCast/
 |   `-- connection.php
 |-- includes/
 |   |-- auth.php
+|   |-- footer.php
 |   `-- functions.php
 |-- pages/
 |   |-- account.php

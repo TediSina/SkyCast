@@ -1008,6 +1008,131 @@ button.is-busy::after {
     margin: 0;
 }
 
+.site-footer {
+    position: relative;
+    overflow: hidden;
+    margin-top: 34px;
+    color: var(--paper-strong);
+    background:
+        linear-gradient(135deg, rgba(18, 22, 18, 0.96), rgba(3, 79, 85, 0.86) 56%, rgba(18, 22, 18, 0.92)),
+        repeating-linear-gradient(90deg, rgba(183, 239, 84, 0.12) 0 1px, transparent 1px 58px),
+        repeating-linear-gradient(0deg, rgba(255, 253, 246, 0.08) 0 1px, transparent 1px 58px);
+    border-top: 1px solid rgba(255, 253, 246, 0.18);
+}
+
+.site-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        conic-gradient(from 28deg at 18% 50%, rgba(183, 239, 84, 0.28), transparent 18%, transparent 78%, rgba(37, 111, 230, 0.16)),
+        radial-gradient(circle at 18% 50%, transparent 0 58px, rgba(183, 239, 84, 0.24) 59px 60px, transparent 61px 150px, rgba(183, 239, 84, 0.16) 151px 152px, transparent 153px);
+    pointer-events: none;
+}
+
+.footer-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(260px, 1.6fr) minmax(150px, 0.7fr) minmax(160px, 0.8fr) minmax(190px, 0.9fr);
+    gap: 24px;
+    align-items: start;
+    padding: 42px 0;
+}
+
+.footer-brand p {
+    max-width: 460px;
+    margin: 14px 0 0;
+    color: rgba(255, 253, 246, 0.72);
+    line-height: 1.7;
+}
+
+.footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--paper-strong);
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.footer-logo::before {
+    content: "";
+    width: 34px;
+    height: 34px;
+    border: 2px solid rgba(255, 253, 246, 0.88);
+    border-radius: 50%;
+    background:
+        conic-gradient(from 25deg, rgba(183, 239, 84, 0.95), transparent 26%, transparent 58%, rgba(37, 111, 230, 0.92) 74%, rgba(232, 95, 79, 0.86)),
+        radial-gradient(circle at center, rgba(18, 22, 18, 0.95) 0 20%, transparent 21%);
+    box-shadow: 4px 4px 0 var(--radar);
+}
+
+.footer-logo:hover {
+    color: var(--radar);
+}
+
+.footer-links,
+.footer-sources {
+    display: grid;
+    gap: 10px;
+}
+
+.footer-links span,
+.footer-sources span {
+    color: var(--radar);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.footer-links a,
+.footer-sources a {
+    width: fit-content;
+    color: rgba(255, 253, 246, 0.78);
+    font-weight: 800;
+}
+
+.footer-links a:hover,
+.footer-sources a:hover {
+    color: var(--paper-strong);
+}
+
+.footer-signal {
+    min-height: 112px;
+    display: grid;
+    align-content: center;
+    gap: 8px;
+    padding: 18px;
+    color: var(--ink);
+    background: var(--radar);
+    border: 1px solid rgba(255, 253, 246, 0.2);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 0 rgba(255, 253, 246, 0.16);
+}
+
+.footer-signal-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--chart-dark);
+    box-shadow: 0 0 0 8px rgba(3, 79, 85, 0.14);
+    animation: sunPulse 3.8s ease-in-out infinite;
+}
+
+.footer-signal strong {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.footer-signal small {
+    color: var(--ink-soft);
+    font-weight: 900;
+}
+
 .card,
 .auth-card,
 .weather-card {
@@ -2175,7 +2300,8 @@ input:focus {
 
     .dashboard-grid,
     .account-grid,
-    .auth-layout {
+    .auth-layout,
+    .footer-grid {
         grid-template-columns: 1fr;
     }
 
@@ -2262,7 +2388,8 @@ input:focus {
     }
 
     .weather-news-actions,
-    .weather-news-refresh {
+    .weather-news-refresh,
+    .footer-signal {
         width: 100%;
     }
 
