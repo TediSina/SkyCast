@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(value)) {
-            setFieldError(input, 'Vendos një e-mail të vlefshëm.');
+            setFieldError(input, 'Shkruaj një email të vlefshëm.');
             return false;
         }
         clearFieldError(input);
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
-    function validateRequiredPassword(input, message = 'Fjalëkalimi nuk mund të jetë bosh.') {
+    function validateRequiredPassword(input, message = 'Shkruaj fjalëkalimin.') {
         if (input.value.trim() === '') {
             setFieldError(input, message);
             return false;
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emailInput.addEventListener('input', () => validateEmail(emailInput));
         passwordInput.addEventListener('input', () => {
             if (passwordInput.value.trim() === '') {
-                setFieldError(passwordInput, 'Fjalëkalimi nuk mund të jetë bosh.');
+                setFieldError(passwordInput, 'Shkruaj fjalëkalimin.');
                 return;
             }
             clearFieldError(passwordInput);
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let passwordOk = true;
             if (passwordInput.value.trim() === '') {
-                setFieldError(passwordInput, 'Fjalëkalimi nuk mund të jetë bosh.');
+                setFieldError(passwordInput, 'Shkruaj fjalëkalimin.');
                 passwordOk = false;
             } else {
                 clearFieldError(passwordInput);
@@ -192,13 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const newPasswordInput = document.getElementById('newPassword');
         const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
 
-        currentPasswordInput.addEventListener('input', () => validateRequiredPassword(currentPasswordInput, 'Fjalëkalimi aktual nuk mund të jetë bosh.'));
+        currentPasswordInput.addEventListener('input', () => validateRequiredPassword(currentPasswordInput, 'Shkruaj fjalëkalimin aktual.'));
         newPasswordInput.addEventListener('input', () => validatePassword(newPasswordInput));
         confirmNewPasswordInput.addEventListener('input', () => validateConfirmPassword(newPasswordInput, confirmNewPasswordInput));
 
         accountPasswordForm.addEventListener('submit', (event) => {
             const isValid =
-                validateRequiredPassword(currentPasswordInput, 'Fjalëkalimi aktual nuk mund të jetë bosh.') &&
+                validateRequiredPassword(currentPasswordInput, 'Shkruaj fjalëkalimin aktual.') &&
                 validatePassword(newPasswordInput) &&
                 validateConfirmPassword(newPasswordInput, confirmNewPasswordInput);
 

@@ -32,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!filter_var($profileEmail, FILTER_VALIDATE_EMAIL)) {
-            $profileErrors[] = 'Vendos një e-mail të vlefshëm.';
+            $profileErrors[] = 'Shkruaj një email të vlefshëm.';
         }
 
         if ($profileEmail !== '' && emailBelongsToAnotherUser($profileEmail, (int) $user['id'])) {
-            $profileErrors[] = 'Ky e-mail përdoret nga një llogari tjetër.';
+            $profileErrors[] = 'Ky email përdoret nga një llogari tjetër.';
         }
 
         if (empty($profileErrors)) {
@@ -107,7 +107,7 @@ $months = [
 ];
 $createdLabel = $createdAt
     ? date('d', $createdAt) . ' ' . $months[(int) date('n', $createdAt)] . ' ' . date('Y', $createdAt)
-    : 'N/A';
+    : 'Pa të dhëna';
 ?>
 <!DOCTYPE html>
 <html lang="sq">
@@ -136,7 +136,7 @@ $createdLabel = $createdAt
             <div>
                 <span class="eyebrow">Llogaria</span>
                 <h2>Profili yt në SkyCast</h2>
-                <p>Shiko të dhënat e llogarisë, përditëso identitetin, ndrysho fjalëkalimin ose fshi llogarinë kur nuk të duhet më.</p>
+                <p>Shiko të dhënat e llogarisë, përditëso profilin, ndrysho fjalëkalimin ose fshi llogarinë kur nuk të duhet më.</p>
             </div>
 
             <div class="account-avatar" aria-hidden="true">
@@ -162,7 +162,7 @@ $createdLabel = $createdAt
                     <strong>#<?= (int) $user['id'] ?></strong>
                 </div>
                 <div class="account-metric">
-                    <span>E-mail</span>
+                    <span>Emaili</span>
                     <strong><?= e($user['email']) ?></strong>
                 </div>
                 <div class="account-metric">
@@ -203,7 +203,7 @@ $createdLabel = $createdAt
                     </div>
 
                     <div class="field-group">
-                        <label for="accountEmail">E-mail</label>
+                        <label for="accountEmail">Emaili</label>
                         <input type="email" id="accountEmail" name="email" value="<?= e($profileEmail) ?>" required>
                     </div>
 

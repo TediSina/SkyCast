@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/functions.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyCast - Aplikacion për Motin</title>
+    <title>SkyCast - Aplikacion për motin</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
 </head>
 <body class="home-page">
@@ -32,10 +32,10 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="landing-hero">
             <div class="container landing-grid">
                 <div class="hero-copy">
-                    <span class="hero-badge">Aplikacion web për motin dhe radar reshjesh</span>
+                    <span class="hero-badge">Aplikacion për motin dhe radarin e reshjeve</span>
                     <h2>SkyCast</h2>
                     <p>
-                        Moti aktual, parashikim orë pas ore, radar reshjesh dhe qytete të ruajtura në një panel
+                        Moti aktual, parashikimi orar, radari i reshjeve dhe qytetet e ruajtura në një panel
                         të shpejtë, të qartë dhe të ndërtuar për përdorim të përditshëm.
                     </p>
 
@@ -44,22 +44,22 @@ require_once __DIR__ . '/includes/functions.php';
                             <a class="primary-btn" href="<?= e(appUrl('pages/dashboard.php')) ?>">Hap panelin</a>
                         <?php else: ?>
                             <a class="primary-btn" href="<?= e(appUrl('pages/register.php')) ?>">Fillo tani</a>
-                            <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr në sistem</a>
+                            <a class="secondary-btn" href="<?= e(appUrl('pages/login.php')) ?>">Hyr në llogari</a>
                         <?php endif; ?>
                     </div>
 
                     <div class="hero-stats">
                         <div class="stat-card">
                             <strong>12 orë</strong>
-                            <span>Parashikim i shpejtë për pjesën tjetër të ditës.</span>
+                            <span>Parashikim i shpejtë për orët e mbetura të ditës.</span>
                         </div>
                         <div class="stat-card">
                             <strong>5 ditë</strong>
-                            <span>Temperatura maksimale, minimale dhe gjendja e motit.</span>
+                            <span>Temperatura maksimale, minimale dhe kushtet e motit.</span>
                         </div>
                         <div class="stat-card">
                             <strong>Radar</strong>
-                            <span>Shiko lëvizjen e reshjeve në hartë interaktive.</span>
+                            <span>Shiko lëvizjen e reshjeve në një hartë interaktive.</span>
                         </div>
                         <div class="stat-card">
                             <strong>Qytete</strong>
@@ -104,9 +104,9 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="features-section">
             <div class="container">
                 <div class="section-heading">
-                    <span class="section-kicker">Mjetet e parashikimit</span>
-                    <h3>Një pamje e plotë për motin që të duhet.</h3>
-                    <p>SkyCast bashkon kërkimin, parashikimin orar, radarin e reshjeve dhe qytetet e ruajtura në një panel të lehtë për t'u përdorur.</p>
+                    <span class="section-kicker">Mjetet e motit</span>
+                    <h3>Një pamje e plotë për motin që të nevojitet.</h3>
+                    <p>SkyCast bashkon kërkimin, parashikimin orar, radarin e reshjeve dhe qytetet e ruajtura në një panel të lehtë për përdorim.</p>
                 </div>
 
                 <div class="features-grid">
@@ -119,7 +119,7 @@ require_once __DIR__ . '/includes/functions.php';
                     <article class="feature-card">
                         <div class="feature-icon">🌦️</div>
                         <h4>Parashikim ditor</h4>
-                        <p>Krahaso shpejt ditët e ardhshme me karta të lexueshme dhe të qarta.</p>
+                        <p>Krahaso shpejt ditët e ardhshme me kartela të qarta dhe të lexueshme.</p>
                     </article>
 
                     <article class="feature-card">
@@ -131,7 +131,7 @@ require_once __DIR__ . '/includes/functions.php';
                     <article class="feature-card">
                         <div class="feature-icon">📍</div>
                         <h4>Qytete të ruajtura</h4>
-                        <p>Kthehu menjëherë te qytetet që ndjek më shpesh pa i kërkuar nga fillimi.</p>
+                        <p>Hap shpejt qytetet që ndjek më shpesh pa i kërkuar nga fillimi.</p>
                     </article>
                 </div>
             </div>
@@ -147,8 +147,8 @@ require_once __DIR__ . '/includes/functions.php';
                 <div class="weather-wire-top">
                     <div class="section-heading weather-wire-heading">
                         <span class="section-kicker">Lajme</span>
-                        <h3>Tituj të përgjithshëm pranë parashikimit.</h3>
-                        <p>Kur ka lajme që lidhen me motin, i shfaqim këtu; përndryshe sjellim tituj të përgjithshëm me përparësi për burime në shqip.</p>
+                        <h3>Lajme të përditësuara pranë parashikimit.</h3>
+                        <p>Kur ka lajme që lidhen me motin, i shfaqim këtu; përndryshe sjellim tituj të përgjithshëm, me përparësi për burime në shqip.</p>
                     </div>
 
                     <div class="weather-news-actions">
@@ -160,7 +160,7 @@ require_once __DIR__ . '/includes/functions.php';
                 <div class="weather-news-grid" data-news-list></div>
 
                 <div class="weather-news-footer">
-                    <span data-news-context>Mbulim global · Shqip</span>
+                    <span data-news-context>Lajme globale · Shqip</span>
                     <a href="https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/" target="_blank" rel="noreferrer">GDELT DOC API</a>
                 </div>
             </div>
@@ -169,8 +169,8 @@ require_once __DIR__ . '/includes/functions.php';
         <section class="cta-section">
             <div class="container cta-box">
                 <div>
-                    <h3>Gati për parashikimin tënd?</h3>
-                    <p>Krijo llogari dhe mbaje motin e qyteteve të preferuara gjithmonë afër.</p>
+                    <h3>Gati të kontrollosh motin?</h3>
+                    <p>Krijo llogari dhe mbaji pranë parashikimet për qytetet e tua të preferuara.</p>
                 </div>
 
                 <div class="button-row">

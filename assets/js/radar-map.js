@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (typeof L === 'undefined') {
-        statusElement.textContent = 'Harta nuk u ngarkua. Kontrollo lidhjen me Leaflet CDN.';
+        statusElement.textContent = 'Harta nuk u ngarkua. Kontrollo lidhjen me rrjetin CDN të Leaflet.';
         statusElement.classList.add('error-text');
         return;
     }
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getRadarStatus(frame) {
-        const frameLabel = frame ? getFrameLabel(frame) : 'korniza e fundit';
+        const frameLabel = frame ? getFrameLabel(frame) : 'pamjen e fundit';
 
         return `Po shfaqen reshjet për ${frameLabel}. Nëse nuk sheh ngjyra në hartë, nuk ka reshje të dukshme në këtë zonë ose në këtë kohë.`;
     }
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         layer.once('tileerror', () => {
             if (!tileErrorShown) {
                 tileErrorShown = true;
-                setStatus('Disa tiles të radarit nuk u ngarkuan. Provo përsëri pas pak.', true);
+                setStatus('Disa shtresa të radarit nuk u ngarkuan. Provo përsëri pas pak.', true);
             }
         });
 
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(url);
 
             if (!response.ok) {
-                throw new Error('Kërkesa nuk u krye.');
+                throw new Error('Të dhënat nuk u morën.');
             }
 
             const data = await response.json();
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rainViewerHost = data.host || '';
 
             if (!rainViewerHost || radarFrames.length === 0) {
-                throw new Error('Nuk ka frames radar të disponueshme tani.');
+                throw new Error('Nuk ka pamje radari të disponueshme tani.');
             }
 
             activeFrameIndex = radarFrames.length - 1;

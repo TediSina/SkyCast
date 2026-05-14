@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     const fallbackReserveArticles = [
         {
-            title: 'NOAA NSSL: kërkime dhe lajme për motin ekstrem',
+            title: 'NOAA NSSL: lajme dhe kërkime për motin ekstrem',
             url: 'https://inside.nssl.noaa.gov/nsslnews/',
             domain: 'inside.nssl.noaa.gov',
             country: 'United States',
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return reserveArticles.slice(0, limit).map((article) => ({
             ...article,
             image: '',
-            date: 'Burim i vazhdueshëm',
+            date: 'Burim i përhershëm',
             sortTime: 0,
             isReserve: true
         }));
@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setBusy(widget, true);
         setStatus(widget, loadingLabel, false, true);
-        setContext(widget, cityLabel ? `Lajme për ${cityLabel} · Shqip` : 'Mbulim global · Shqip');
+        setContext(widget, cityLabel ? `Lajme për ${cityLabel} · Shqip` : 'Lajme globale · Shqip');
         renderSkeleton(widget, limit);
 
         try {
@@ -467,10 +467,10 @@ document.addEventListener('DOMContentLoaded', () => {
             setContext(widget, usedEnglish
                 ? 'Burime rezervë · Anglisht'
                 : (usedReserve
-                    ? 'Burime të qëndrueshme · Shqip'
+                    ? 'Burime të përhershme · Shqip'
                     : (usedFallback
-                        ? `Pak tituj për ${cityLabel}; shfaqet mbulim global · Shqip`
-                        : (cityLabel ? `Lajme për ${cityLabel} · Shqip` : 'Mbulim global · Shqip')
+                        ? `Ka pak tituj për ${cityLabel}; po shfaqen lajme globale · Shqip`
+                        : (cityLabel ? `Lajme për ${cityLabel} · Shqip` : 'Lajme globale · Shqip')
                     )
                 )
             );
@@ -481,8 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const reserve = getReserveArticles(limit);
             renderArticles(widget, reserve);
-            setStatus(widget, 'Burimi live nuk u arrit; po shfaqen burime lajmesh në shqip.');
-            setContext(widget, 'Burime të qëndrueshme · Shqip');
+            setStatus(widget, 'Burimi i drejtpërdrejtë nuk u arrit; po shfaqen burime lajmesh në shqip.');
+            setContext(widget, 'Burime të përhershme · Shqip');
         } finally {
             if (!abortController.signal.aborted) {
                 setBusy(widget, false);

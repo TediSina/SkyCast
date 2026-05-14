@@ -78,12 +78,12 @@ $errorMessage = getFlash('error');
             <div>
                 <span class="eyebrow">Paneli</span>
                 <h2>Mirë se erdhe, <?= e($user['name']) ?>.</h2>
-                <p>Kërko një qytet, shiko motin aktual, ndiq orët e ardhshme dhe ruaj vendet që të interesojnë.</p>
+                <p>Kërko një qytet, shiko motin aktual, ndiq orët e ardhshme dhe ruaji vendet që të interesojnë.</p>
             </div>
 
             <div class="dashboard-weather-mark">
                 <span>☀️</span>
-                <strong>Parashikim drejtpërdrejt</strong>
+                <strong>Parashikim i përditësuar</strong>
             </div>
         </section>
 
@@ -110,7 +110,7 @@ $errorMessage = getFlash('error');
                         <input
                             type="text"
                             id="cityInput"
-                            placeholder="Shembull: Tirana"
+                            placeholder="Shembull: Tiranë"
                             autocomplete="off"
                             role="combobox"
                             aria-autocomplete="list"
@@ -189,8 +189,8 @@ $errorMessage = getFlash('error');
             <div class="weather-news-panel-top">
                 <div>
                     <span class="section-kicker">Lajme</span>
-                    <h3>Çfarë po ndodh rreth vendit që po ndjek</h3>
-                    <p data-news-context>Mbulim global në shqip derisa të zgjedhësh një qytet.</p>
+                    <h3>Lajme për vendin që po ndjek</h3>
+                    <p data-news-context>Lajme globale në shqip derisa të zgjedhësh një qytet.</p>
                 </div>
 
                 <div class="weather-news-actions">
@@ -212,13 +212,13 @@ $errorMessage = getFlash('error');
                 <div>
                     <span class="section-kicker">Radar</span>
                     <h3 id="radarTitle">Harta e reshjeve</h3>
-                    <p>Radar reshjesh dhe kushte të shpejta për pikën që zgjedh në hartë.</p>
+                    <p>Shiko reshjet dhe kushtet e motit për çdo pikë që zgjedh në hartë.</p>
                 </div>
 
                 <div class="radar-actions" aria-label="Kontrollet e hartës së radarit">
                     <button type="button" class="secondary-btn" id="radarPlayButton">Luaj</button>
-                    <button type="button" class="secondary-btn" id="radarLatestButton">Më i fundit</button>
-                    <button type="button" class="secondary-btn" id="radarFocusButton" disabled>Te qyteti</button>
+                    <button type="button" class="secondary-btn" id="radarLatestButton">Pamja e fundit</button>
+                    <button type="button" class="secondary-btn" id="radarFocusButton" disabled>Te qyteti i zgjedhur</button>
                 </div>
             </div>
 
@@ -244,7 +244,7 @@ $errorMessage = getFlash('error');
 
             <p class="radar-source">
                 Burimi i radarit: <a href="https://www.rainviewer.com/" target="_blank" rel="noreferrer">RainViewer API</a>.
-                Harta përdor tiles nga OpenStreetMap.
+                Harta përdor shtresa harte nga OpenStreetMap.
             </p>
         </section>
     </main>

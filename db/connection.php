@@ -39,7 +39,7 @@ function db(): PDO
         return $pdo;
     } catch (PDOException $e) {
         exit(
-            'Gabim ne lidhjen me databazen. Sigurohu qe MySQL ne XAMPP eshte ndezur. <br><br>' .
+            'Gabim në lidhjen me bazën e të dhënave. Sigurohu që MySQL në XAMPP është aktiv. <br><br>' .
             'Detaje: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')
         );
     }

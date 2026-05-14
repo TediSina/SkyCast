@@ -1,6 +1,6 @@
 # SkyCast
 
-SkyCast është një aplikacion web për motin, i ndërtuar me PHP, MySQL, HTML, CSS dhe JavaScript. Aplikacioni lejon përdoruesit të krijojnë llogari, të hyjnë në panelin personal, të kërkojnë qytete, të shohin motin aktual, parashikimin orë pas ore dhe parashikimin 5-ditor, si edhe të ruajnë qytetet që duan t'i kontrollojnë më shpesh.
+SkyCast është një aplikacion web për motin, i ndërtuar me PHP, MySQL, HTML, CSS dhe JavaScript. Aplikacioni u mundëson përdoruesve të krijojnë llogari, të hyjnë në panelin personal, të kërkojnë qytete, të shohin motin aktual, parashikimin orar dhe parashikimin 5-ditor, si edhe të ruajnë qytetet që duan t'i kontrollojnë më shpesh.
 
 Të dhënat e motit dhe kërkimet e qyteteve merren nga API-të publike të Open-Meteo:
 
@@ -18,10 +18,10 @@ Lajmet e përgjithshme merren nga GDELT DOC API, një burim publik pa çelës AP
 
 ## Funksionalitetet
 
-- Regjistrim dhe hyrje në sistem për përdoruesit.
+- Regjistrim dhe hyrje në llogari për përdoruesit.
 - Panel personal për kërkimin e motit sipas qytetit.
 - Sugjerime qytetesh gjatë kërkimit.
-- Shfaqje e motit aktual, erës dhe gjendjes së motit.
+- Shfaqje e motit aktual, erës dhe kushteve të motit.
 - Grafikë për temperaturën, mundësinë e shiut dhe erën për 12 orët e ardhshme.
 - Parashikim orë pas ore për 12 orët e ardhshme.
 - Parashikim 5-ditor me temperatura minimale dhe maksimale.
@@ -29,7 +29,7 @@ Lajmet e përgjithshme merren nga GDELT DOC API, një burim publik pa çelës AP
 - Hartë interaktive me radar reshjesh, animacion kohor dhe fokusim te qyteti i kërkuar.
 - Lajme të përgjithshme me përparësi për burime në shqip; anglishtja përdoret vetëm si rezervë e fundit.
 - Në panel, lajmet lidhen automatikisht me qytetin e zgjedhur kur ka artikuj të disponueshëm.
-- Footer i përbashkët me navigim dhe burimet kryesore të të dhënave.
+- Fundfaqe e përbashkët me navigim dhe burimet kryesore të të dhënave.
 - Faqe llogarie për përditësim profili, ndryshim fjalëkalimi dhe fshirje llogarie.
 
 ## Kërkesat
@@ -69,7 +69,7 @@ Për ta ekzekutuar lokalisht në XAMPP duhen:
    const DB_PASS = '';
    ```
 
-   Aplikacioni krijon automatikisht databazën `skycast_db` dhe tabelat `users` dhe `saved_cities` kur hapet për herë të parë.
+   Aplikacioni krijon automatikisht bazën e të dhënave `skycast_db` dhe tabelat `users` dhe `saved_cities` kur hapet për herë të parë.
 
 5. Hap aplikacionin në shfletues:
 
@@ -115,7 +115,7 @@ SkyCast/
 ## Shënime
 
 - Nuk nevojitet instalim paketash me Composer ose npm.
-- Nëse shfaqet gabim lidhjeje me databazën, sigurohu që `MySQL` është ndezur në XAMPP dhe që porta `3306` nuk është e zënë nga një shërbim tjetër.
+- Nëse shfaqet gabim lidhjeje me bazën e të dhënave, sigurohu që `MySQL` është aktiv në XAMPP dhe që porta `3306` nuk është e zënë nga një shërbim tjetër.
 - Nëse të dhënat e motit ose lajmet nuk ngarkohen, kontrollo lidhjen me internetin dhe nëse shfletuesi mund të arrijë API-të e Open-Meteo dhe GDELT.
 
 ## Licenca

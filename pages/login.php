@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Vendos një e-mail të vlefshëm.';
+        $errors[] = 'Shkruaj një email të vlefshëm.';
     }
 
     if ($password === '') {
-        $errors[] = 'Fjalëkalimi nuk mund të jetë bosh.';
+        $errors[] = 'Shkruaj fjalëkalimin.';
     }
 
     if (empty($errors)) {
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect(appUrl('pages/dashboard.php'));
         }
 
-        $errors[] = 'E-mail ose fjalëkalim i pasaktë.';
+        $errors[] = 'Emaili ose fjalëkalimi është i pasaktë.';
     }
 }
 ?>
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyr - SkyCast</title>
+    <title>Hyr në llogari - SkyCast</title>
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
     <script src="<?= e(appUrl('assets/js/validation.js')) ?>" defer></script>
 </head>
@@ -49,14 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="auth-forecast-card">
                     <span>Sonte</span>
                     <strong>18°C</strong>
-                    <p>Qasje e shpejtë tek moti aktual, parashikimi orar dhe qytetet e tua të ruajtura.</p>
+                    <p>Qasje e shpejtë te moti aktual, parashikimi orar dhe qytetet e tua të ruajtura.</p>
                 </div>
             </aside>
 
             <section class="auth-card">
                 <div class="auth-badge">Hyr</div>
-                <h1>Hyr në sistem</h1>
-                <p class="auth-subtitle">Vazhdo te paneli yt personal për motin dhe qytetet e ruajtura.</p>
+                <h1>Hyr në llogari</h1>
+                <p class="auth-subtitle">Vazhdo te paneli yt personal për motin dhe qytetet që ke ruajtur.</p>
 
                 <?php if ($successMessage): ?>
                     <div class="alert success"><?= e($successMessage) ?></div>
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <form method="POST" class="form" id="loginForm" novalidate>
                     <div class="field-group">
-                        <label for="email">E-mail</label>
+                        <label for="email">Emaili</label>
                         <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
                     </div>
 
@@ -87,11 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
 
                 <p class="small-text">
-                    Nuk ke llogari? <a href="<?= e(appUrl('pages/register.php')) ?>">Regjistrohu</a>
+                    Nuk ke ende llogari? <a href="<?= e(appUrl('pages/register.php')) ?>">Regjistrohu</a>
                 </p>
 
                 <p class="small-text">
-                    <a href="<?= e(appUrl()) ?>">Kthehu te kryefaqja</a>
+                    <a href="<?= e(appUrl()) ?>">Kthehu në kryefaqe</a>
                 </p>
             </section>
         </div>

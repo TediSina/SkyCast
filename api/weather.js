@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         return `
-            <div class="chart-scroll" tabindex="0" aria-label="Lëviz grafikun horizontalisht">
+            <div class="chart-scroll" tabindex="0" aria-label="Lëviz grafikun majtas-djathtas">
                 <svg class="metric-chart ${variant}" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
                     ${renderGridLines(range, unit)}
                     ${renderVerticalGuides(items)}
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         return `
-            <div class="chart-scroll" tabindex="0" aria-label="Lëviz grafikun horizontalisht">
+            <div class="chart-scroll" tabindex="0" aria-label="Lëviz grafikun majtas-djathtas">
                 <svg class="metric-chart rain-bars" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
                     ${renderGridLines(range, '%')}
                     ${renderVerticalGuides(items)}
@@ -468,17 +468,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const rangePath = `M ${maxPoints.map((point) => `${point.x} ${point.y}`).join(' L ')} L ${[...minPoints].reverse().map((point) => `${point.x} ${point.y}`).join(' L ')} Z`;
         const maxPointHtml = maxPoints.map((point) => `
             <circle class="chart-point chart-point-max" cx="${point.x}" cy="${point.y}" r="4">
-                <title>${escapeHtml(point.label)}: maksimumi ${Math.round(point.value)}°C</title>
+                <title>${escapeHtml(point.label)}: temperatura maksimale ${Math.round(point.value)}°C</title>
             </circle>
         `).join('');
         const minPointHtml = minPoints.map((point) => `
             <circle class="chart-point chart-point-min" cx="${point.x}" cy="${point.y}" r="4">
-                <title>${escapeHtml(point.label)}: minimumi ${Math.round(point.value)}°C</title>
+                <title>${escapeHtml(point.label)}: temperatura minimale ${Math.round(point.value)}°C</title>
             </circle>
         `).join('');
 
         return `
-            <div class="chart-scroll daily-chart-scroll" tabindex="0" aria-label="Lëviz grafikun horizontalisht">
+            <div class="chart-scroll daily-chart-scroll" tabindex="0" aria-label="Lëviz grafikun majtas-djathtas">
                 <svg class="metric-chart daily-range-chart" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i temperaturave maksimale dhe minimale për 5 ditët e ardhshme" preserveAspectRatio="xMidYMid meet">
                     ${renderGridLines(range, '°C')}
                     ${renderVerticalGuides(dailyItems)}
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span><i class="legend-max"></i>Maksimumi</span>
                     <span><i class="legend-min"></i>Minimumi</span>
                 </div>
-                <p>Shtrirja ditore: <strong>${escapeHtml(minStats.min)} deri ${escapeHtml(maxStats.max)}</strong></p>
+                <p>Intervali ditor: <strong>${escapeHtml(minStats.min)} deri ${escapeHtml(maxStats.max)}</strong></p>
             </article>
         `;
     }
@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
                 <section class="forecast-section weather-graphs-section">
                     <h4 class="forecast-title">Grafikët e motit</h4>
-                    <p class="empty-forecast">Nuk ka mjaftueshëm të dhëna orare për grafikë.</p>
+                    <p class="empty-forecast">Nuk ka mjaftueshëm të dhëna orare për të shfaqur grafikët.</p>
                 </section>
             `;
         }
@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="graphs-heading">
                     <div>
                         <span class="section-kicker">Grafikë</span>
-                        <h4 class="forecast-title">Lexim vizual për 12 orët e ardhshme</h4>
+                        <h4 class="forecast-title">Grafikë për 12 orët e ardhshme</h4>
                     </div>
                 </div>
 
@@ -572,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <strong>${escapeHtml(precipitationStats.max)}</strong>
                         </div>
                         ${renderBarGraph(hourlyItems, 'precipitationProbability')}
-                        <p>Piku i reshjeve: <strong>${escapeHtml(precipitationStats.max)}</strong></p>
+                        <p>Mundësia më e lartë: <strong>${escapeHtml(precipitationStats.max)}</strong></p>
                     </article>
 
                     <article class="weather-graph-card wind-graph">
@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveCityLabel.textContent = cityLabel;
         }
 
-        saveCityButton?.setAttribute('aria-label', `Ruaje ${cityLabel} në listën e qyteteve`);
+        saveCityButton?.setAttribute('aria-label', `Ruaje ${cityLabel} në listën e qyteteve të tua`);
         saveCityForm.classList.remove('hidden');
     }
 
@@ -775,8 +775,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="forecast-icon">${meta.icon}</div>
                     <h4>${escapeHtml(formatDate(date))}</h4>
                     <p class="forecast-text">${escapeHtml(meta.text)}</p>
-                    <p><strong>Maks:</strong> ${daily.temperature_2m_max[index]}°C</p>
-                    <p><strong>Min:</strong> ${daily.temperature_2m_min[index]}°C</p>
+                    <p><strong>Maks.:</strong> ${daily.temperature_2m_max[index]}°C</p>
+                    <p><strong>Min.:</strong> ${daily.temperature_2m_min[index]}°C</p>
                 </div>
             `;
         }).join('');
@@ -855,11 +855,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchCityMatches(cityName, count = 6, signal = undefined) {
-        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=${count}&language=en&format=json`;
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=${count}&language=sq&format=json`;
         const response = await fetch(url, { signal });
 
         if (!response.ok) {
-            throw new Error('Nuk u arrit kërkesa për qytetin.');
+            throw new Error('Nuk u morën të dhënat për qytetin.');
         }
 
         const data = await response.json();
@@ -882,7 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error('Nuk u arrit kërkesa për motin.');
+            throw new Error('Nuk u morën të dhënat e motit.');
         }
 
         return response.json();
@@ -948,7 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cityData.longitude
             );
 
-            showStatus('Të dhënat u ngarkuan me sukses.');
+            showStatus('Parashikimi u ngarkua me sukses.');
         } catch (error) {
             weatherResult.innerHTML = '';
             showStatus(error.message, true);
@@ -974,7 +974,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const weatherData = await fetchWeather(latitude, longitude);
             renderWeather(cityName, countryName, weatherData, latitude, longitude);
-            showStatus('Të dhënat u ngarkuan me sukses.');
+            showStatus('Parashikimi u ngarkua me sukses.');
         } catch (error) {
             weatherResult.innerHTML = '';
             showStatus(error.message, true);

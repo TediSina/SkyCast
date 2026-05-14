@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Vendos një e-mail të vlefshëm.';
+        $errors[] = 'Shkruaj një email të vlefshëm.';
     }
 
     if (strlen($password) < 6) {
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = registerUser($name, $email, $password);
 
         if ($result['success']) {
-            setFlash('success', 'Regjistrimi u krye me sukses. Tani mund të hysh në sistem.');
+            setFlash('success', 'Regjistrimi u krye me sukses. Tani mund të hysh në llogari.');
             redirect(appUrl('pages/login.php'));
         }
 
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <section class="auth-card">
                 <div class="auth-badge">Regjistrohu</div>
                 <h1>Krijo llogari</h1>
-                <p class="auth-subtitle">Ndërto listën tënde të qyteteve dhe hap parashikimin sa herë të duhet.</p>
+                <p class="auth-subtitle">Krijo listën tënde të qyteteve dhe hape parashikimin sa herë që të duhet.</p>
 
                 <?php if (!empty($errors)): ?>
                     <div class="alert error">
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div class="field-group">
-                        <label for="email">E-mail</label>
+                        <label for="email">Emaili</label>
                         <input type="email" id="email" name="email" value="<?= e($email) ?>" required>
                     </div>
 
@@ -106,11 +106,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
 
                 <p class="small-text">
-                    Ke llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr këtu</a>
+                    Ke tashmë llogari? <a href="<?= e(appUrl('pages/login.php')) ?>">Hyr në llogari</a>
                 </p>
 
                 <p class="small-text">
-                    <a href="<?= e(appUrl()) ?>">Kthehu te kryefaqja</a>
+                    <a href="<?= e(appUrl()) ?>">Kthehu në kryefaqe</a>
                 </p>
             </section>
         </div>

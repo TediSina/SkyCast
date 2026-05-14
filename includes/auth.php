@@ -45,7 +45,7 @@ function registerUser(string $name, string $email, string $password): array
     if (findUserByEmail($email)) {
         return [
             'success' => false,
-            'message' => 'Ky e-mail ekziston tashmë.',
+            'message' => 'Ky email ekziston tashmë.',
         ];
     }
 

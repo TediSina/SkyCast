@@ -5,7 +5,7 @@ declare(strict_types=1);
     <div class="container footer-grid">
         <div class="footer-brand">
             <a class="footer-logo" href="<?= e(appUrl()) ?>">SkyCast</a>
-            <p>Parashikim, radar reshjesh dhe lajme kryesore në një hapësirë të qartë për vendet që ndjek më shpesh.</p>
+            <p>Parashikim, radar i reshjeve dhe lajme kryesore në një hapësirë të qartë për vendet që ndjek më shpesh.</p>
         </div>
 
         <nav class="footer-links" aria-label="Navigimi në fund të faqes">
@@ -29,7 +29,7 @@ declare(strict_types=1);
 
         <div class="footer-signal" aria-label="Përmbledhje e platformës">
             <span class="footer-signal-dot"></span>
-            <strong>Parashikim live</strong>
+            <strong>Parashikim i përditësuar</strong>
             <small>© <?= date('Y') ?> SkyCast</small>
         </div>
     </div>
