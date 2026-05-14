@@ -136,6 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function formatShortDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('sq-AL', {
+            weekday: 'short',
+            day: '2-digit'
+        });
+    }
+
     function formatHour(dateTimeString, currentTimeString = '') {
         if (currentTimeString && dateTimeString.slice(0, 13) === currentTimeString.slice(0, 13)) {
             return 'Tani';
@@ -232,13 +240,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chartFrame = {
         width: 640,
-        height: 220,
+        height: 280,
         left: 58,
         right: 620,
-        top: 18,
-        bottom: 184,
-        axisLabelY: 212
+        top: 22,
+        bottom: 238,
+        axisLabelY: 268
     };
+
+    function getChartItemLabel(item) {
+        return item.axisLabel || formatHour(item.time);
+    }
 
     function getChartPoints(items, key, range) {
         const { left, right, top, bottom } = chartFrame;
@@ -260,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 x: Number(x.toFixed(2)),
                 y: Number(y.toFixed(2)),
                 value,
-                label: formatHour(item.time)
+                label: getChartItemLabel(item)
             };
         }).filter(Boolean);
     }
@@ -330,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return getAxisIndexes(items).map((itemIndex) => {
             const x = left + ((right - left) * itemIndex / denominator);
-            return `<text class="chart-axis-label chart-x-label" x="${x.toFixed(2)}" y="${axisLabelY}">${escapeHtml(formatHour(items[itemIndex].time))}</text>`;
+            return `<text class="chart-axis-label chart-x-label" x="${x.toFixed(2)}" y="${axisLabelY}">${escapeHtml(getChartItemLabel(items[itemIndex]))}</text>`;
         }).join('');
     }
 
@@ -357,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         return `
-            <svg class="metric-chart ${variant}" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="none">
+            <svg class="metric-chart ${variant}" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
                 ${renderGridLines(range, unit)}
                 ${renderVerticalGuides(items)}
                 <path class="chart-area" d="${areaPath}"></path>
@@ -400,12 +412,118 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         return `
-            <svg class="metric-chart rain-bars" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="none">
+            <svg class="metric-chart rain-bars" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
                 ${renderGridLines(range, '%')}
                 ${renderVerticalGuides(items)}
                 ${bars}
                 ${renderAxisLabels(items)}
             </svg>
+        `;
+    }
+
+    function getDailyGraphItems(daily) {
+        if (!daily || !Array.isArray(daily.time) || daily.time.length === 0) {
+            return [];
+        }
+
+        const maxTemperatures = Array.isArray(daily.temperature_2m_max) ? daily.temperature_2m_max : [];
+        const minTemperatures = Array.isArray(daily.temperature_2m_min) ? daily.temperature_2m_min : [];
+        const weatherCodes = Array.isArray(daily.weather_code) ? daily.weather_code : [];
+
+        return daily.time.slice(0, 5).map((time, index) => ({
+            time,
+            axisLabel: formatShortDate(time),
+            maxTemperature: maxTemperatures[index],
+            minTemperature: minTemperatures[index],
+            weatherCode: weatherCodes[index]
+        })).filter((item) => (
+            getNumericValue(item.maxTemperature) !== null
+            && getNumericValue(item.minTemperature) !== null
+        ));
+    }
+
+    function renderDailyTemperatureGraph(dailyItems) {
+        const range = getMetricRange([
+            ...dailyItems.map((item) => item.maxTemperature),
+            ...dailyItems.map((item) => item.minTemperature)
+        ]);
+
+        if (!range) {
+            return '';
+        }
+
+        const maxPoints = getChartPoints(dailyItems, 'maxTemperature', range);
+        const minPoints = getChartPoints(dailyItems, 'minTemperature', range);
+
+        if (maxPoints.length < 2 || minPoints.length < 2) {
+            return '';
+        }
+
+        const maxLinePath = maxPoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+        const minLinePath = minPoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+        const rangePath = `M ${maxPoints.map((point) => `${point.x} ${point.y}`).join(' L ')} L ${[...minPoints].reverse().map((point) => `${point.x} ${point.y}`).join(' L ')} Z`;
+        const maxPointHtml = maxPoints.map((point) => `
+            <circle class="chart-point chart-point-max" cx="${point.x}" cy="${point.y}" r="4">
+                <title>${escapeHtml(point.label)}: maksimumi ${Math.round(point.value)}°C</title>
+            </circle>
+        `).join('');
+        const minPointHtml = minPoints.map((point) => `
+            <circle class="chart-point chart-point-min" cx="${point.x}" cy="${point.y}" r="4">
+                <title>${escapeHtml(point.label)}: minimumi ${Math.round(point.value)}°C</title>
+            </circle>
+        `).join('');
+
+        return `
+            <svg class="metric-chart daily-range-chart" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i temperaturave maksimale dhe minimale për 5 ditët e ardhshme" preserveAspectRatio="xMidYMid meet">
+                ${renderGridLines(range, '°C')}
+                ${renderVerticalGuides(dailyItems)}
+                <path class="chart-range-fill" d="${rangePath}"></path>
+                <path class="chart-line chart-line-max" d="${maxLinePath}"></path>
+                <path class="chart-line chart-line-min" d="${minLinePath}"></path>
+                ${maxPointHtml}
+                ${minPointHtml}
+                ${renderAxisLabels(dailyItems)}
+            </svg>
+        `;
+    }
+
+    function renderDailyForecastGraph(daily) {
+        const dailyItems = getDailyGraphItems(daily);
+
+        if (dailyItems.length < 2) {
+            return '';
+        }
+
+        const graph = renderDailyTemperatureGraph(dailyItems);
+
+        if (!graph) {
+            return '';
+        }
+
+        const maxStats = getMetricStats(dailyItems.map((item) => item.maxTemperature), '°');
+        const minStats = getMetricStats(dailyItems.map((item) => item.minTemperature), '°');
+        const iconStrip = dailyItems.map((item) => {
+            const meta = getWeatherMeta(item.weatherCode);
+
+            return `<span title="${escapeHtml(meta.text)}">${meta.icon}</span>`;
+        }).join('');
+
+        return `
+            <article class="weather-graph-card daily-graph">
+                <div class="graph-card-top">
+                    <span>Parashikimi 5-ditor</span>
+                    <strong>${escapeHtml(minStats.min)} / ${escapeHtml(maxStats.max)}</strong>
+                </div>
+                <div class="daily-graph-icons" style="--daily-count: ${dailyItems.length}">
+                    ${iconStrip}
+                </div>
+                ${graph}
+                <div class="graph-legend" aria-hidden="true">
+                    <span><i class="legend-max"></i>Maksimumi</span>
+                    <span><i class="legend-min"></i>Minimumi</span>
+                </div>
+                <p>Shtrirja ditore: <strong>${escapeHtml(minStats.min)} deri ${escapeHtml(maxStats.max)}</strong></p>
+            </article>
         `;
     }
 
@@ -628,6 +746,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentTheme = getWeatherTheme(current.weather_code);
         const currentTime = current.time ? formatHour(current.time) : '-';
         const hourlyItems = getUpcomingHours(hourly, current.time);
+        const dailyGraphHtml = renderDailyForecastGraph(daily);
 
         const hourlyHtml = hourlyItems.length > 0 ? hourlyItems.map((hour, index) => {
             const meta = getWeatherMeta(hour.weatherCode, hour.isDay);
@@ -695,6 +814,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${hourlyHtml}
                     </div>
                 </section>
+
+                ${dailyGraphHtml ? `
+                    <section class="forecast-section daily-graph-section">
+                        <h4 class="forecast-title">Grafiku 5-ditor</h4>
+                        ${dailyGraphHtml}
+                    </section>
+                ` : ''}
 
                 <section class="forecast-section">
                     <h4 class="forecast-title">Parashikimi 5-ditor</h4>

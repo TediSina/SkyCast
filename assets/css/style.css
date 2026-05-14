@@ -1806,8 +1806,8 @@ input:focus {
 
 .weather-graphs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 16px;
 }
 
 .weather-graph-card {
@@ -1815,12 +1815,12 @@ input:focus {
     --chart-fill: rgba(4, 119, 122, 0.14);
     position: relative;
     min-width: 0;
-    min-height: 338px;
+    min-height: 408px;
     display: grid;
     align-content: start;
-    gap: 12px;
+    gap: 14px;
     overflow: hidden;
-    padding: 18px;
+    padding: 20px;
     background:
         linear-gradient(90deg, rgba(255, 253, 246, 0.94), rgba(255, 253, 246, 0.86)),
         repeating-linear-gradient(90deg, rgba(4, 119, 122, 0.08) 0 1px, transparent 1px 32px);
@@ -1855,6 +1855,41 @@ input:focus {
 .wind-graph {
     --chart-color: var(--chart);
     --chart-fill: rgba(4, 119, 122, 0.14);
+    grid-column: 1 / -1;
+}
+
+.daily-graph {
+    --chart-color: var(--coral);
+    --chart-fill: rgba(231, 163, 54, 0.14);
+    grid-column: 1 / -1;
+    min-height: 462px;
+}
+
+.daily-graph-section .daily-graph {
+    margin-top: 0;
+}
+
+.daily-graph-icons {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 900px);
+    display: grid;
+    grid-template-columns: repeat(var(--daily-count, 5), minmax(0, 1fr));
+    gap: 8px;
+    margin-inline: auto;
+    padding: 2px 3.125% 0 9.0625%;
+    color: var(--ink);
+    font-size: 24px;
+    line-height: 1;
+}
+
+.daily-graph-icons span {
+    display: grid;
+    place-items: center;
+    min-height: 34px;
+    background: rgba(255, 253, 246, 0.72);
+    border: 1px solid rgba(35, 38, 30, 0.12);
+    border-radius: var(--radius);
 }
 
 .graph-card-top {
@@ -1897,10 +1932,16 @@ input:focus {
 .metric-chart {
     position: relative;
     z-index: 1;
-    width: 100%;
-    height: 220px;
+    width: min(100%, 780px);
+    height: auto;
+    aspect-ratio: 640 / 280;
     display: block;
+    margin-inline: auto;
     overflow: visible;
+}
+
+.daily-graph .metric-chart {
+    width: min(100%, 900px);
 }
 
 .chart-grid-line {
@@ -1924,6 +1965,13 @@ input:focus {
     fill: var(--chart-fill);
 }
 
+.chart-range-fill {
+    fill: rgba(231, 163, 54, 0.2);
+    stroke: rgba(231, 163, 54, 0.38);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+}
+
 .chart-line {
     fill: none;
     stroke: var(--chart-color);
@@ -1934,11 +1982,28 @@ input:focus {
     filter: drop-shadow(0 8px 10px rgba(35, 38, 30, 0.12));
 }
 
+.chart-line-min {
+    stroke: var(--chart);
+    stroke-dasharray: 10 8;
+}
+
+.chart-line-max {
+    stroke: var(--coral);
+}
+
 .chart-point {
     fill: var(--paper-strong);
     stroke: var(--chart-color);
     stroke-width: 3;
     vector-effect: non-scaling-stroke;
+}
+
+.chart-point-min {
+    stroke: var(--chart);
+}
+
+.chart-point-max {
+    stroke: var(--coral);
 }
 
 .chart-bar {
@@ -1961,6 +2026,35 @@ input:focus {
     font-size: 11px;
     text-anchor: end;
     dominant-baseline: middle;
+}
+
+.graph-legend {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.graph-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.graph-legend i {
+    width: 22px;
+    height: 4px;
+    display: inline-block;
+    border-radius: 8px;
+    background: var(--coral);
+}
+
+.graph-legend .legend-min {
+    background: repeating-linear-gradient(90deg, var(--chart) 0 8px, transparent 8px 12px);
 }
 
 .hourly-forecast {
