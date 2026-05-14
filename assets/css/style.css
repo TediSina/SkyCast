@@ -1573,7 +1573,7 @@ input:focus {
 
 .radar-time-badge {
     top: 12px;
-    left: 12px;
+    right: 12px;
     padding: 9px 11px;
     color: var(--ink);
     font-size: 13px;
