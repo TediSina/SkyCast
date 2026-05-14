@@ -29,7 +29,7 @@ declare(strict_types=1);
 
         <div class="footer-signal" aria-label="Përmbledhje e platformës">
             <span class="footer-signal-dot"></span>
-            <strong>Tryeza e motit live</strong>
+            <strong>Parashikim live</strong>
             <small>© <?= date('Y') ?> SkyCast</small>
         </div>
     </div>
