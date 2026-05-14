@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const apiUrl = 'https://api.gdeltproject.org/api/v2/doc/doc';
     const feedMeta = {
-        label: 'Moti',
-        symbol: 'WX'
+        label: 'Lajme',
+        symbol: 'LAJM'
     };
     const primaryQueryTiers = [
         '("parashikimi i motit" OR "moti sot" OR "moti nesër" OR meteorologji OR reshje OR përmbytje OR permbytje OR vapë OR vapa OR borë OR bore OR stuhi OR furtunë OR uragan OR ciklon OR thatësirë OR thatesire OR ngrica OR rrebeshe OR temperatura)',
@@ -417,11 +417,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const cityName = (widget.dataset.newsCity || '').trim();
         const countryName = (widget.dataset.newsCountry || '').trim();
         const cityLabel = [cityName, countryName].filter(Boolean).join(', ');
-        const loadingLabel = cityLabel ? `Duke kërkuar lajme për ${cityLabel}` : 'Duke kërkuar lajme meteo';
+        const loadingLabel = cityLabel ? `Duke kërkuar lajme për ${cityLabel}` : 'Duke kërkuar lajme';
 
         setBusy(widget, true);
         setStatus(widget, loadingLabel, false, true);
-        setContext(widget, cityLabel ? `Lajme moti për ${cityLabel} · Shqip` : 'Mbulim global · Shqip');
+        setContext(widget, cityLabel ? `Lajme për ${cityLabel} · Shqip` : 'Mbulim global · Shqip');
         renderSkeleton(widget, limit);
 
         try {
@@ -458,19 +458,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderArticles(widget, articles);
             setStatus(widget, usedEnglish
-                ? `U shfaqën ${articles.length} burime meteo rezervë në anglisht.`
+                ? `U shfaqën ${articles.length} burime lajmesh rezervë në anglisht.`
                 : (usedReserve
-                    ? `U shfaqën ${articles.length} burime meteo në shqip.`
-                    : `U ngarkuan ${articles.length} tituj moti në shqip.`
+                    ? `U shfaqën ${articles.length} burime lajmesh në shqip.`
+                    : `U ngarkuan ${articles.length} tituj në shqip.`
                 )
             );
             setContext(widget, usedEnglish
                 ? 'Burime rezervë · Anglisht'
                 : (usedReserve
-                    ? 'Burime të qëndrueshme meteo · Shqip'
+                    ? 'Burime të qëndrueshme · Shqip'
                     : (usedFallback
                         ? `Pak tituj për ${cityLabel}; shfaqet mbulim global · Shqip`
-                        : (cityLabel ? `Lajme moti për ${cityLabel} · Shqip` : 'Mbulim global · Shqip')
+                        : (cityLabel ? `Lajme për ${cityLabel} · Shqip` : 'Mbulim global · Shqip')
                     )
                 )
             );
@@ -481,8 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const reserve = getReserveArticles(limit);
             renderArticles(widget, reserve);
-            setStatus(widget, 'Burimi live nuk u arrit; po shfaqen burime meteo në shqip.');
-            setContext(widget, 'Burime të qëndrueshme meteo · Shqip');
+            setStatus(widget, 'Burimi live nuk u arrit; po shfaqen burime lajmesh në shqip.');
+            setContext(widget, 'Burime të qëndrueshme · Shqip');
         } finally {
             if (!abortController.signal.aborted) {
                 setBusy(widget, false);

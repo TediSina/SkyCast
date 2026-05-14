@@ -146,9 +146,9 @@ require_once __DIR__ . '/includes/functions.php';
             >
                 <div class="weather-wire-top">
                     <div class="section-heading weather-wire-heading">
-                        <span class="section-kicker">Lajme meteo</span>
-                        <h3>Sinjale nga lajmet që lëvizin bashkë me motin.</h3>
-                        <p>Tituj të fundit që lidhen me motin, me përparësi të plotë për burime në shqip.</p>
+                        <span class="section-kicker">Lajme</span>
+                        <h3>Tituj të përgjithshëm pranë parashikimit.</h3>
+                        <p>Kur ka lajme që lidhen me motin, i shfaqim këtu; përndryshe sjellim tituj të përgjithshëm me përparësi për burime në shqip.</p>
                     </div>
 
                     <div class="weather-news-actions">
@@ -156,7 +156,7 @@ require_once __DIR__ . '/includes/functions.php';
                     </div>
                 </div>
 
-                <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme meteo</div>
+                <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme</div>
                 <div class="weather-news-grid" data-news-list></div>
 
                 <div class="weather-news-footer">

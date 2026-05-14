@@ -12,7 +12,7 @@ Harta e radarit përdor Leaflet dhe RainViewer:
 - `https://leafletjs.com`
 - `https://api.rainviewer.com/public/weather-maps.json`
 
-Lajmet meteo merren nga GDELT DOC API, një burim publik pa çelës API:
+Lajmet e përgjithshme merren nga GDELT DOC API, një burim publik pa çelës API:
 
 - `https://api.gdeltproject.org/api/v2/doc/doc`
 
@@ -27,7 +27,7 @@ Lajmet meteo merren nga GDELT DOC API, një burim publik pa çelës API:
 - Parashikim 5-ditor me temperatura minimale dhe maksimale.
 - Ruajtje dhe fshirje e qyteteve të preferuara.
 - Hartë interaktive me radar reshjesh, animacion kohor dhe fokusim te qyteti i kërkuar.
-- Lajme meteo me përparësi për burime në shqip; anglishtja përdoret vetëm si rezervë e fundit.
+- Lajme të përgjithshme me përparësi për burime në shqip; anglishtja përdoret vetëm si rezervë e fundit.
 - Në panel, lajmet lidhen automatikisht me qytetin e zgjedhur kur ka artikuj të disponueshëm.
 - Footer i përbashkët me navigim dhe burimet kryesore të të dhënave.
 - Faqe llogarie për përditësim profili, ndryshim fjalëkalimi dhe fshirje llogarie.

@@ -188,8 +188,8 @@ $errorMessage = getFlash('error');
         >
             <div class="weather-news-panel-top">
                 <div>
-                    <span class="section-kicker">Lajme meteo</span>
-                    <h3>Çfarë po ndodh rreth motit</h3>
+                    <span class="section-kicker">Lajme</span>
+                    <h3>Çfarë po ndodh rreth vendit që po ndjek</h3>
                     <p data-news-context>Mbulim global në shqip derisa të zgjedhësh një qytet.</p>
                 </div>
 
@@ -198,7 +198,7 @@ $errorMessage = getFlash('error');
                 </div>
             </div>
 
-            <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme meteo</div>
+            <div class="weather-news-status loading-text" data-news-status>Duke kërkuar lajme</div>
             <div class="weather-news-grid dashboard-news-grid" data-news-list></div>
 
             <p class="weather-news-source">
