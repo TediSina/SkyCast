@@ -209,13 +209,18 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    const chartFrame = {
+        width: 640,
+        height: 220,
+        left: 58,
+        right: 620,
+        top: 18,
+        bottom: 184,
+        axisLabelY: 212
+    };
+
     function getChartPoints(items, key, range) {
-        const width = 640;
-        const height = 220;
-        const left = 36;
-        const right = width - 20;
-        const top = 18;
-        const bottom = height - 36;
+        const { left, right, top, bottom } = chartFrame;
         const usableWidth = right - left;
         const usableHeight = bottom - top;
         const denominator = Math.max(items.length - 1, 1);
@@ -239,10 +244,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }).filter(Boolean);
     }
 
-    function renderGridLines() {
-        return [18, 73.33, 128.66, 184].map((y) => `
-            <line class="chart-grid-line" x1="36" y1="${y}" x2="620" y2="${y}"></line>
+    function formatChartTick(value, unit) {
+        return `${Math.round(value)}${unit}`;
+    }
+
+    function getChartTicks(range, unit) {
+        const tickCount = 4;
+        const { top, bottom } = chartFrame;
+
+        return Array.from({ length: tickCount }, (_, index) => {
+            const ratio = index / (tickCount - 1);
+            const value = range.max - ((range.max - range.min) * ratio);
+            const y = top + ((bottom - top) * ratio);
+
+            return {
+                y: Number(y.toFixed(2)),
+                label: formatChartTick(value, unit)
+            };
+        });
+    }
+
+    function getAxisIndexes(items) {
+        if (items.length === 0) {
+            return [];
+        }
+
+        return [...new Set([0, Math.floor((items.length - 1) / 2), items.length - 1])];
+    }
+
+    function renderGridLines(range, unit) {
+        const { left, right, top, bottom } = chartFrame;
+
+        const ticks = getChartTicks(range, unit).map((tick) => `
+            <g class="chart-y-reading">
+                <line class="chart-grid-line" x1="${left}" y1="${tick.y}" x2="${right}" y2="${tick.y}"></line>
+                <text class="chart-axis-label chart-y-label" x="${left - 10}" y="${tick.y}">${escapeHtml(tick.label)}</text>
+            </g>
         `).join('');
+
+        return `
+            <line class="chart-axis-line" x1="${left}" y1="${top}" x2="${left}" y2="${bottom}"></line>
+            ${ticks}
+        `;
+    }
+
+    function renderVerticalGuides(items) {
+        const { left, right, top, bottom } = chartFrame;
+        const denominator = Math.max(items.length - 1, 1);
+
+        return getAxisIndexes(items).filter((itemIndex) => itemIndex !== 0).map((itemIndex) => {
+            const x = left + ((right - left) * itemIndex / denominator);
+
+            return `<line class="chart-grid-line chart-vertical-guide" x1="${x.toFixed(2)}" y1="${top}" x2="${x.toFixed(2)}" y2="${bottom}"></line>`;
+        }).join('');
     }
 
     function renderAxisLabels(items) {
@@ -250,12 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return '';
         }
 
-        const labelIndexes = [0, Math.floor((items.length - 1) / 2), items.length - 1];
-        const uniqueIndexes = [...new Set(labelIndexes)];
+        const { left, right, axisLabelY } = chartFrame;
+        const denominator = Math.max(items.length - 1, 1);
 
-        return uniqueIndexes.map((itemIndex) => {
-            const x = 36 + ((620 - 36) * itemIndex / Math.max(items.length - 1, 1));
-            return `<text class="chart-axis-label" x="${x.toFixed(2)}" y="212">${escapeHtml(formatHour(items[itemIndex].time))}</text>`;
+        return getAxisIndexes(items).map((itemIndex) => {
+            const x = left + ((right - left) * itemIndex / denominator);
+            return `<text class="chart-axis-label chart-x-label" x="${x.toFixed(2)}" y="${axisLabelY}">${escapeHtml(formatHour(items[itemIndex].time))}</text>`;
         }).join('');
     }
 
@@ -274,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const linePath = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
-        const areaPath = `M 36 184 L ${points.map((point) => `${point.x} ${point.y}`).join(' L ')} L 620 184 Z`;
+        const areaPath = `M ${chartFrame.left} ${chartFrame.bottom} L ${points.map((point) => `${point.x} ${point.y}`).join(' L ')} L ${chartFrame.right} ${chartFrame.bottom} Z`;
         const pointHtml = points.map((point) => `
             <circle class="chart-point" cx="${point.x}" cy="${point.y}" r="4">
                 <title>${escapeHtml(point.label)}: ${Math.round(point.value)}${escapeHtml(unit)}</title>
@@ -282,8 +336,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         return `
-            <svg class="metric-chart ${variant}" viewBox="0 0 640 220" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="none">
-                ${renderGridLines()}
+            <svg class="metric-chart ${variant}" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="none">
+                ${renderGridLines(range, unit)}
+                ${renderVerticalGuides(items)}
                 <path class="chart-area" d="${areaPath}"></path>
                 <path class="chart-line" d="${linePath}"></path>
                 ${pointHtml}
@@ -300,11 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return '';
         }
 
-        const width = 640;
-        const left = 36;
-        const right = width - 20;
-        const bottom = 184;
-        const top = 18;
+        const { left, right, bottom, top } = chartFrame;
         const usableWidth = right - left;
         const gap = 7;
         const barWidth = Math.max((usableWidth / items.length) - gap, 12);
@@ -328,8 +379,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         return `
-            <svg class="metric-chart rain-bars" viewBox="0 0 640 220" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="none">
-                ${renderGridLines()}
+            <svg class="metric-chart rain-bars" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="none">
+                ${renderGridLines(range, '%')}
+                ${renderVerticalGuides(items)}
                 ${bars}
                 ${renderAxisLabels(items)}
             </svg>
