@@ -270,6 +270,17 @@ button:active,
     transform: translateY(1px) scale(0.98);
 }
 
+button:disabled,
+.primary-btn:disabled,
+.secondary-btn:disabled,
+.button-link:disabled,
+.danger-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
+    box-shadow: none;
+}
+
 button.is-busy {
     color: transparent;
     pointer-events: none;
@@ -1506,6 +1517,156 @@ input:focus {
     margin-top: 16px;
 }
 
+.radar-card {
+    margin-top: 18px;
+    overflow: hidden;
+}
+
+.radar-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.radar-top h3 {
+    margin: 8px 0 8px;
+    font-size: 26px;
+}
+
+.radar-top p {
+    max-width: 680px;
+    margin: 0;
+}
+
+.radar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.radar-actions .secondary-btn {
+    min-height: 40px;
+}
+
+.radar-controls {
+    display: grid;
+    grid-template-columns: auto minmax(220px, 1fr) auto minmax(140px, 240px);
+    gap: 10px 12px;
+    align-items: center;
+    padding: 14px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.radar-controls label {
+    white-space: nowrap;
+}
+
+.radar-controls input[type="range"] {
+    min-height: 24px;
+    padding: 0;
+    border: 0;
+    accent-color: var(--primary);
+}
+
+.radar-controls input[type="range"]:focus {
+    box-shadow: none;
+}
+
+.radar-status {
+    min-height: 22px;
+    margin: 14px 0;
+    color: #203746;
+    font-weight: 800;
+}
+
+.radar-map-shell {
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    background: #dbe9ec;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.radar-map {
+    width: 100%;
+    height: min(62vh, 560px);
+    min-height: 420px;
+}
+
+.radar-map .leaflet-container,
+.radar-map {
+    font-family: inherit;
+}
+
+.radar-time-badge,
+.radar-legend {
+    position: absolute;
+    z-index: 500;
+    border: 1px solid rgba(215, 229, 231, 0.8);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px);
+}
+
+.radar-time-badge {
+    top: 12px;
+    left: 12px;
+    padding: 9px 11px;
+    color: #17303d;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.radar-legend {
+    right: 12px;
+    bottom: 12px;
+    display: grid;
+    grid-template-columns: auto 124px auto;
+    gap: 8px;
+    align-items: center;
+    padding: 9px 10px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.radar-legend-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #8de6ff, #2f80ed 34%, #ffd166 64%, #e76f51 82%, #8f1d1d);
+}
+
+.radar-source {
+    margin: 12px 0 0;
+    font-size: 13px;
+}
+
+.radar-popup {
+    display: grid;
+    gap: 4px;
+    min-width: 170px;
+    color: #203746;
+}
+
+.radar-popup strong {
+    color: #142330;
+}
+
+.radar-popup span {
+    font-size: 13px;
+}
+
+.leaflet-control-attribution {
+    font-size: 11px;
+}
+
 .empty-state {
     display: grid;
     gap: 6px;
@@ -1766,12 +1927,21 @@ input:focus {
 
     .cta-box,
     .dashboard-intro,
-    .account-hero {
+    .account-hero,
+    .radar-top {
         display: grid;
     }
 
     .account-metrics {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .radar-actions {
+        justify-content: flex-start;
+    }
+
+    .radar-controls {
+        grid-template-columns: auto minmax(160px, 1fr);
     }
 }
 
@@ -1834,5 +2004,29 @@ input:focus {
     .inline-form,
     .inline-form .danger-btn {
         width: 100%;
+    }
+
+    .radar-actions {
+        width: 100%;
+    }
+
+    .radar-actions .secondary-btn {
+        flex: 1 1 auto;
+    }
+
+    .radar-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .radar-map,
+    .radar-map-shell {
+        min-height: 360px;
+    }
+
+    .radar-legend {
+        right: 8px;
+        bottom: 8px;
+        left: 8px;
+        grid-template-columns: auto minmax(84px, 1fr) auto;
     }
 }

@@ -57,6 +57,7 @@ $errorMessage = getFlash('error');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paneli - SkyCast</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="<?= e(appUrl('assets/css/style.css')) ?>">
 </head>
 <body class="dashboard-body">
@@ -173,9 +174,52 @@ $errorMessage = getFlash('error');
                 <?php endif; ?>
             </aside>
         </div>
+
+        <section class="card radar-card" aria-labelledby="radarTitle">
+            <div class="radar-top">
+                <div>
+                    <span class="section-kicker">Radar</span>
+                    <h3 id="radarTitle">Harta e reshjeve</h3>
+                    <p>Radar reshjesh dhe kushte të shpejta për pikën që zgjedh në hartë.</p>
+                </div>
+
+                <div class="radar-actions" aria-label="Kontrollet e hartës së radarit">
+                    <button type="button" class="secondary-btn" id="radarPlayButton">Luaj</button>
+                    <button type="button" class="secondary-btn" id="radarLatestButton">Më i fundit</button>
+                    <button type="button" class="secondary-btn" id="radarFocusButton" disabled>Te qyteti</button>
+                </div>
+            </div>
+
+            <div class="radar-controls">
+                <label for="radarFrameSlider">Koha</label>
+                <input type="range" id="radarFrameSlider" min="0" max="0" value="0" disabled>
+
+                <label for="radarOpacity">Dukshmëria</label>
+                <input type="range" id="radarOpacity" min="25" max="100" value="76">
+            </div>
+
+            <div id="radarStatus" class="radar-status">Duke ngarkuar hartën e radarit...</div>
+
+            <div class="radar-map-shell">
+                <div id="radarMap" class="radar-map" aria-label="Hartë interaktive me radar reshjesh"></div>
+                <div class="radar-time-badge" id="radarTimestamp">--</div>
+                <div class="radar-legend" aria-label="Legjenda e intensitetit të reshjeve">
+                    <span>I dobët</span>
+                    <div class="radar-legend-bar"></div>
+                    <span>I fortë</span>
+                </div>
+            </div>
+
+            <p class="radar-source">
+                Burimi i radarit: <a href="https://www.rainviewer.com/" target="_blank" rel="noreferrer">RainViewer API</a>.
+                Harta përdor tiles nga OpenStreetMap.
+            </p>
+        </section>
     </main>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="<?= e(appUrl('api/weather.js')) ?>"></script>
+    <script src="<?= e(appUrl('assets/js/radar-map.js')) ?>"></script>
     <script src="<?= e(appUrl('assets/js/main.js')) ?>"></script>
 </body>
 </html>

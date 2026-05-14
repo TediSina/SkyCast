@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.account-summary-card',
         '.dashboard-grid > .card',
         '.account-grid > .card',
+        '.radar-card',
         '.weather-card',
         '.forecast-section'
     ].join(',');

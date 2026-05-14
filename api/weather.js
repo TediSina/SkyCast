@@ -378,6 +378,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         prepareSaveCity(cityName, latitude, longitude);
+
+        document.dispatchEvent(new CustomEvent('skycast:city-selected', {
+            detail: {
+                name: cityName,
+                country: countryName,
+                latitude,
+                longitude
+            }
+        }));
     }
 
     async function fetchCityMatches(cityName, count = 6, signal = undefined) {

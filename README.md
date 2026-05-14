@@ -7,6 +7,11 @@ Të dhënat e motit dhe kërkimet e qyteteve merren nga API-të publike të Open
 - `https://api.open-meteo.com`
 - `https://geocoding-api.open-meteo.com`
 
+Harta e radarit përdor Leaflet dhe RainViewer:
+
+- `https://leafletjs.com`
+- `https://api.rainviewer.com/public/weather-maps.json`
+
 ## Funksionalitetet
 
 - Regjistrim dhe hyrje në sistem për përdoruesit.
@@ -16,6 +21,7 @@ Të dhënat e motit dhe kërkimet e qyteteve merren nga API-të publike të Open
 - Parashikim orë pas ore për 12 orët e ardhshme.
 - Parashikim 5-ditor me temperatura minimale dhe maksimale.
 - Ruajtje dhe fshirje e qyteteve të preferuara.
+- Hartë interaktive me radar reshjesh, animacion kohor dhe fokusim te qyteti i kërkuar.
 - Faqe llogarie për përditësim profili, ndryshim fjalëkalimi dhe fshirje llogarie.
 
 ## Kërkesat
@@ -78,6 +84,7 @@ SkyCast/
 |   |   `-- style.css
 |   `-- js/
 |       |-- main.js
+|       |-- radar-map.js
 |       `-- validation.js
 |-- db/
 |   `-- connection.php
