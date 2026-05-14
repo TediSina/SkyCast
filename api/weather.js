@@ -369,14 +369,16 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         return `
-            <svg class="metric-chart ${variant}" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
-                ${renderGridLines(range, unit)}
-                ${renderVerticalGuides(items)}
-                <path class="chart-area" d="${areaPath}"></path>
-                <path class="chart-line" d="${linePath}"></path>
-                ${pointHtml}
-                ${renderAxisLabels(items)}
-            </svg>
+            <div class="chart-scroll" tabindex="0" aria-label="Lëviz grafikun horizontalisht">
+                <svg class="metric-chart ${variant}" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i ${escapeHtml(unit === '°C' ? 'temperaturës' : 'erës')} për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
+                    ${renderGridLines(range, unit)}
+                    ${renderVerticalGuides(items)}
+                    <path class="chart-area" d="${areaPath}"></path>
+                    <path class="chart-line" d="${linePath}"></path>
+                    ${pointHtml}
+                    ${renderAxisLabels(items)}
+                </svg>
+            </div>
         `;
     }
 
@@ -412,12 +414,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         return `
-            <svg class="metric-chart rain-bars" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
-                ${renderGridLines(range, '%')}
-                ${renderVerticalGuides(items)}
-                ${bars}
-                ${renderAxisLabels(items)}
-            </svg>
+            <div class="chart-scroll" tabindex="0" aria-label="Lëviz grafikun horizontalisht">
+                <svg class="metric-chart rain-bars" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i mundësisë së shiut për orët e ardhshme" preserveAspectRatio="xMidYMid meet">
+                    ${renderGridLines(range, '%')}
+                    ${renderVerticalGuides(items)}
+                    ${bars}
+                    ${renderAxisLabels(items)}
+                </svg>
+            </div>
         `;
     }
 
@@ -474,16 +478,18 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         return `
-            <svg class="metric-chart daily-range-chart" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i temperaturave maksimale dhe minimale për 5 ditët e ardhshme" preserveAspectRatio="xMidYMid meet">
-                ${renderGridLines(range, '°C')}
-                ${renderVerticalGuides(dailyItems)}
-                <path class="chart-range-fill" d="${rangePath}"></path>
-                <path class="chart-line chart-line-max" d="${maxLinePath}"></path>
-                <path class="chart-line chart-line-min" d="${minLinePath}"></path>
-                ${maxPointHtml}
-                ${minPointHtml}
-                ${renderAxisLabels(dailyItems)}
-            </svg>
+            <div class="chart-scroll daily-chart-scroll" tabindex="0" aria-label="Lëviz grafikun horizontalisht">
+                <svg class="metric-chart daily-range-chart" viewBox="0 0 ${chartFrame.width} ${chartFrame.height}" role="img" aria-label="Grafiku i temperaturave maksimale dhe minimale për 5 ditët e ardhshme" preserveAspectRatio="xMidYMid meet">
+                    ${renderGridLines(range, '°C')}
+                    ${renderVerticalGuides(dailyItems)}
+                    <path class="chart-range-fill" d="${rangePath}"></path>
+                    <path class="chart-line chart-line-max" d="${maxLinePath}"></path>
+                    <path class="chart-line chart-line-min" d="${minLinePath}"></path>
+                    ${maxPointHtml}
+                    ${minPointHtml}
+                    ${renderAxisLabels(dailyItems)}
+                </svg>
+            </div>
         `;
     }
 

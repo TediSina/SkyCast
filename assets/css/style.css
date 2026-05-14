@@ -1806,8 +1806,8 @@ input:focus {
 
 .weather-graphs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
 }
 
 .weather-graph-card {
@@ -1815,7 +1815,7 @@ input:focus {
     --chart-fill: rgba(4, 119, 122, 0.14);
     position: relative;
     min-width: 0;
-    min-height: 408px;
+    min-height: 424px;
     display: grid;
     align-content: start;
     gap: 14px;
@@ -1855,7 +1855,6 @@ input:focus {
 .wind-graph {
     --chart-color: var(--chart);
     --chart-fill: rgba(4, 119, 122, 0.14);
-    grid-column: 1 / -1;
 }
 
 .daily-graph {
@@ -1929,19 +1928,38 @@ input:focus {
     color: var(--ink);
 }
 
-.metric-chart {
+.chart-scroll {
     position: relative;
     z-index: 1;
-    width: min(100%, 780px);
-    height: auto;
-    aspect-ratio: 640 / 280;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 0 10px;
+    scrollbar-color: rgba(4, 119, 122, 0.42) transparent;
+}
+
+.chart-scroll:focus-visible {
+    outline: 2px solid rgba(4, 119, 122, 0.42);
+    outline-offset: 3px;
+}
+
+.metric-chart {
+    position: relative;
+    width: 640px;
+    max-width: none;
+    height: 280px;
     display: block;
-    margin-inline: auto;
     overflow: visible;
 }
 
+.daily-chart-scroll {
+    max-width: 900px;
+    margin-inline: auto;
+}
+
 .daily-graph .metric-chart {
-    width: min(100%, 900px);
+    width: 900px;
+    height: 394px;
 }
 
 .chart-grid-line {
